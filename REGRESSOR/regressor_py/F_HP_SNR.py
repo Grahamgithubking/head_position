@@ -1,6 +1,6 @@
 # ## All original code is copyright of Graham King, Trinity College Institute of Neuroscience. 
 # #Date: 05/12/2021
-# Inputting of predicted SNR-Headposition values into numpy arrays for two head positions per session (vol 576, vol 1726),
+# Inputting of <Predicted/True> SNR-Headposition values into numpy arrays for two head positions per session (vol 576, vol 1726),
 # for all sessions of the 48 particpants with both preterm and term sessions
 # 
 # allsnr is a 48x2x2x387 npy matrix
@@ -39,19 +39,22 @@ def get_two_session_subjects():
     return allpid, allsessid
 
 
-def load_snr(hp_path, allsessid):
+def load_snr(hp_path, allsessid, snrtrue):
     # Loading SNR_HeadPosition values for TWO headpositions in each of 96 sessions
 
     nrois=387
     nhps=2 # number of head positions nhps
     nsess=2
-    npart=48
-    allsnr=np.zeros((npart, nsess, nhps, nrois))
+    nsubj=48
+    allsnr=np.zeros((nsubj, nsess, nhps, nrois))
     print('the shape of allsnr zeros array is:')
     print(allsnr.shape)
     print()
 
-    hps = ['_SNR_HP576', '_SNR_HP1726']
+    if snrtrue:
+        hps = ['_SNRtrue_HP576', '_SNRtrue_HP1726']
+    else:
+        hps = ['_SNR_HP576', '_SNR_HP1726']
 
     for pidind, (pid, sessions) in enumerate(allsessid.items()):
     # for pid, sessions in allsessid.items():
@@ -85,13 +88,21 @@ def load_snr(hp_path, allsessid):
     print()
 
     # Saving output:
-    np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/192hp_snr.npy', allsnr)
-
-
+    if snrtrue:
+        np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/192hp_snrtrue.npy', allsnr)
+    else:
+        np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/192hp_snr.npy', allsnr)
+    
+    
 
 if __name__ == '__main__':
+    
+    ## Switch to select snrcoil (false) versus snrtrue (true):
+    snrtrue=True
+    
     allpid, allsessid= get_two_session_subjects()
 
     hp_path = '/dhcp/scanner_positioning/rois/'
     
-    load_snr(hp_path, allsessid)
+    load_snr(hp_path, allsessid, snrtrue)
+    

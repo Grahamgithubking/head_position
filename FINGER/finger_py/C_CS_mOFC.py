@@ -51,7 +51,7 @@ plt.ylabel('Connectome Stability', fontsize=13)
 plt.legend(['r=0.42, *p<0.005'], loc='lower right', fontsize=13)
 plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/acrosssess_figures/CS_vs_OFC.jpg')
 
-pc1 = pg.corr(meanofc, withinfc42, tail='two-sided', method='pearson')
+pc1 = pg.corr(meanofc, within42, tail='two-sided', method='pearson')
 print('The pearson correlation coefficient for Mean OFC and Within-Subject Connectome is:')
 print(pc1)
 print()

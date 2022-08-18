@@ -55,15 +55,27 @@ def make_PID_SID_arrays(one_sessid, two_sessid):
     print('The allsessid dict has been converted to array of type:')
     print(type(allsessid))
     print()
-    np.save('/dhcp/fmri_anna_graham/GKgit/fingerprinting/allpid.npy', allpid)
+
+    if one_sessid:
+        np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/416allpid.npy', allpid)
+        np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/416allsessid.npy', allsessid)
+    if two_sessid:
+        np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48allpid.npy', allpid)
+        np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/96allsessid.npy', allsessid)
+
+
     print('The allpid list was saved as an array')
-    np.save('/dhcp/fmri_anna_graham/GKgit/fingerprinting/allsessid.npy', allsessid)
     print('The allsessid dict was saved as an array')
     print()
 
-def load_arrays():
-    allpid = np.load('allpid.npy')
-    allsessid = np.load('allsessid.npy', allow_pickle=True) #I had to allow_pickle=True so as to be able to load allsessid
+def load_arrays(one_sessid, two_sessid):
+    
+    if one_sessid:
+        allpid = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/416allpid.npy')
+        allsessid = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/416allsessid.npy', allow_pickle=True)
+    if two_sessid:
+        allpid = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48allpid.npy')
+        allsessid = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/96allsessid.npy', allow_pickle=True)
     print('The two npy array files were loaded')
     print()
 
@@ -83,15 +95,12 @@ def load_arrays():
     
 if __name__ == '__main__':
     
-    ##Two SWITCHES for choosing participants with either one (true/false), two sessions (false/true) or both(true/true):
+    ##Two SWITCHES for choosing participants with either one (true/false), two sessions (false/true):
     one_sessid = False
     two_sessid = True
 
     make_PID_SID_arrays(one_sessid, two_sessid)
 
-    load_arrays()
+    load_arrays(one_sessid, two_sessid)
 
     
-
-
-

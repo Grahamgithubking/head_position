@@ -16,8 +16,8 @@ import pingouin as pg
 import statsmodels.api as sm
 
 def load_arrays():
-    allpid = np.load('/dhcp/fmri_anna_graham/GKgit/fingerprinting/allpid.npy')
-    allsessid = np.load('/dhcp/fmri_anna_graham/GKgit/fingerprinting/allsessid.npy', allow_pickle=True) #I had to allow_pickle=True so as to be able to load allsessid
+    allpid = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/allpid.npy')
+    allsessid = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/allsessid.npy', allow_pickle=True) #I had to allow_pickle=True so as to be able to load allsessid
     print('The two npy array files were loaded')
     print()
 

@@ -6,6 +6,8 @@
 #Uses par_to_affine.py to translate these to FLIRT format transformation matrix (FLIRT (FMRIB's Linear Image Registration Tool))
 #Reorients the Schaefer40wk template in individual functional space representing the motion at the specific volume
 
+cd /dhcp/fmri_anna_graham/GKgit/head_position/HEADCOIL/participant_files/
+
 while IFS= read -r line
 do
     SUBJ=$(echo "$line" | awk -F, '{printf "sub-"; printf $1}')
