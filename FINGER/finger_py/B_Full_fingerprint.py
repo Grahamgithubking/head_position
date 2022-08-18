@@ -33,7 +33,8 @@ def get_two_session_subjects():
             allsessid[pid]=[]
             for sid in df_sess['session_id']:
                 allsessid[pid].append(sid)
-
+    print(allpid)
+    print()
     return allpid, allsessid
 
 def session2session(allpid):
@@ -73,13 +74,20 @@ def session2session(allpid):
 
     #Find all the points comparing session 0 to session 1
     comparesess=sessim[0::2,1::2]
+    print('The shape of comparesess is:')
+    print(comparesess.shape)
+    print('Sliced at [42:,42:] gives:')
+    print()
+    print(comparesess[42:,42:])
+    print()
+
 
     ## Saving the within participant array:
     within=np.diag(comparesess)
     print(within)
-    print()
     print('The shape of the within array is:')
     print(within.shape)
+    print()
     np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48withinfc.npy', within)
 
     ## Saving the across particpant array:
@@ -91,9 +99,9 @@ def session2session(allpid):
         btwfc_all.append(btwfc)
     btwfc_array=np.array(btwfc_all)
     print(btwfc_array)
-    print()
     print('The shape of the btwfc_all array is:')
     print(btwfc_array.shape)
+    print()
     np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/btwfc.npy', btwfc_array)
     
     ## Saving the unique fingerprint fp_i (within_fc minus between_fc, for each i th subject):
@@ -106,9 +114,9 @@ def session2session(allpid):
         fp_all.append(fp_i)
     fp_array=np.array(fp_all)
     print(fp_all)
-    print()
     print('the shape of the fp_all array is:')
     print(fp_array.shape)
+    print()
     np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48fp.npy', fp_array)
     
     
@@ -119,16 +127,23 @@ def session2session(allpid):
     plt.title('a)', fontsize=20, fontweight="bold")
     plt.xlabel('Participants 1 - 48', fontsize=18)
     plt.ylabel('Participants 1 - 48', fontsize=18)
-    plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/acrosssess_figures/RSM_acrosssess.jpg')
+    plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/acrosssess_figures/RSM_acrosssess.jpg')
 
     #Sort columns according to how well each subject of the session0 matches each of the session1
     comparesess_sorted=np.argsort(comparesess, axis=0)
+    print('The shape of comparesess_sorted is:')
+    print(comparesess_sorted.shape)
+    print('Sliced at [42:,42:] gives:')
+    print()
+    print(comparesess_sorted[42:,42:])
+    print()
     #Find out the rank of the true match (in column i, where subject i ended up in the sorted ranking)
     rankofmatch=np.where((comparesess_sorted - np.arange(nsubj))==0)[0]
 
     for ind, subj in enumerate(allpid):
         print('%s\t%d'%(subj, rankofmatch[ind]))
     print()
+
 
     bins=np.arange(0,49,1)-0.5
     plt.style.use('ggplot')
