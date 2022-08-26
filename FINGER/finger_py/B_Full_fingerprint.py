@@ -137,9 +137,16 @@ def session2session(allpid):
     print()
     print(comparesess_sorted[42:,42:])
     print()
-    #Find out the rank of the true match (in column i, where subject i ended up in the sorted ranking)
-    rankofmatch=np.where((comparesess_sorted - np.arange(nsubj))==0)[0]
 
+    # Identifying whether withinFC is the highest correlation:
+    match = np.diag(comparesess) == np.max(comparesess, axis=0)
+    for ind, subj in enumerate(allpid):
+        print('%s\t%s'%(subj, match[ind]))
+    print()
+
+    #Find out the rank of the true match (in column i, where subject i ended up in the sorted ranking)
+    ### Error with code here????????
+    rankofmatch=np.where(((comparesess_sorted - np.arange(nsubj))==0))[0]
     for ind, subj in enumerate(allpid):
         print('%s\t%d'%(subj, rankofmatch[ind]))
     print()

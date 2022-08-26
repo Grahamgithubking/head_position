@@ -120,9 +120,86 @@ from scipy.stats import bootstrap
 #################################
 
 
-mofc=np.genfromtxt('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_data/48_mOFC.csv', delimiter=',')
-mofc=mofc[:,1:]
-mofc=np.ravel(mofc)
-print(mofc)
-print(mofc.shape)
-np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48_mofc.npy', mofc)
+# mofc=np.genfromtxt('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_data/48_mOFC.csv', delimiter=',')
+# mofc=mofc[:,1:]
+# mofc=np.ravel(mofc)
+# print(mofc)
+# print(mofc.shape)
+# np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48_mofc.npy', mofc)
+
+#####################################
+
+# comparesess=np.array([[4,5,2,],[15,30,12],[23,20,7]])
+# print(comparesess)
+# print(comparesess.shape)
+
+# #Sort columns according to how well each subject of the session0 matches each of the session1
+# comparesess_sorted=np.argsort(comparesess, axis=0)
+# print(comparesess_sorted)
+# print()
+
+# # #Find out the rank of the true match (in column i, where subject i ended up in the sorted ranking)
+# # rankofmatch=np.where((comparesess_sorted - np.arange(3))==0)[0]
+# rankofmatch=np.where(((comparesess_sorted - np.arange(3))==0))
+# # rankofmatch=np.where((comparesess_sorted - np.arange(3))==0)[1]
+# print(rankofmatch)
+# print()
+
+# match = np.diag(comparesess) == np.max(comparesess, axis=0)
+# print('this is match:')
+# print(match)
+# print()
+
+
+# allpid=['sub1','sub2','sub3']
+# for ind, subj in enumerate(allpid):
+#     print('%s\t%d'%(subj, rankofmatch[ind]))
+# print()
+
+# x=np.arange(3)
+# print(x)
+# print()
+
+# g=np.array([[0,0,0],[1,2,2],[2,1,1]])
+# print(g)
+# k=np.array([0,1,2])
+# print(k)
+# print()
+# p=g - k
+# print(p)
+
+##################################
+
+# all=np.genfromtxt('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_data/48subjbirth_noRS.csv', delimiter=',')
+# scanone=all[1:,2:3]
+# scanone=np.ravel(scanone)
+# print(scanone)
+# print(scanone.shape)
+# np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48_scanone.npy', scanone)
+
+# scanint=all[1:,4:]
+# scanint=np.ravel(scanint)
+# print(scanint)
+# print(scanint.shape)
+# np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48_scanint.npy', scanint)
+
+#########################################################
+
+
+# fc = np.arange(48)
+# fc_reshaped=np.reshape(fc, (3,4,4))
+# print(fc_reshaped)
+
+# nsubj = np.arange(3)
+# reg_a = [0, 2] 
+# reg_b = [0, 2] 
+# mat = np.empty([len(nsubj),len(reg_a), len(reg_b)])
+# for subind, subj in enumerate(nsubj):
+#     for inda, a in enumerate(reg_a):
+#         for indb, b in enumerate(reg_b):
+#             fc_temp = fc_reshaped[subj,a,b]
+#             #  a * b standing in for what ever operation you wish to perform with the two regions :)
+#             mat[subind,inda,indb] = fc_temp
+# print(mat)
+
+#######################################################
