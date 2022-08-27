@@ -70,7 +70,10 @@ def loading_SNRHP(run_snr, snr_path, snrcoil416, snrcoil96, snrtrue, one_sessid,
         print('The shapeof snr_all is:')
         print(snr_all.shape)
         if one_sessid:
-            np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/416_snr_416_erode1.npy', snr_all) #Change name here!!!
+            if snrcoil416:
+                np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/416_snr_416_erode1.npy', snr_all) #Change name here!!!
+            if snrtrue:
+                np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/416_snr_true.npy', snr_all) #Change name here!!!
         if two_sessid:
             if snrcoil416:
                 np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/96_snr_416_erode1.npy', snr_all) #Change name here!!!
@@ -136,8 +139,8 @@ if __name__ == '__main__':
     run_snr = True ### A switch for calculating SNRHP array
     run_fc = False ### A switch for calculating FC array
 
-    one_sessid=False
-    two_sessid=True
+    one_sessid=True
+    two_sessid=False
 
     snrcoil416=False
     snrcoil96=False

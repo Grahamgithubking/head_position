@@ -203,3 +203,28 @@ from scipy.stats import bootstrap
 # print(mat)
 
 #######################################################
+
+# roisonebased = [154,161,167,175,363,368,374,377] # base 1
+# roiszerobased=[x-1 for x in roisonebased]
+# print(f"These are the roiszerobased: {roiszerobased}")
+
+#####################################
+
+regions = list(np.arange(8))
+print(regions)
+print()
+values = np.arange(8)
+print(values)
+print()
+
+allvalues = []
+print(allvalues)
+print()
+
+for ind, roi in enumerate(regions):
+    for indb, roib in enumerate(regions):
+        if indb > ind:
+            value = values[roi] + values[roib]
+            allvalues.append(value)
+print()
+print(allvalues)
