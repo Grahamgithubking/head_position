@@ -11,8 +11,8 @@ import seaborn as sns
 
 def loadfc():
     ## Choose either of these:
-    allfc = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/fc_416.npy')
-    # allfc = np.load ('/dhcp/fmri_anna_graham/GKgit/finger_npy/fc_96.npy')
+    # allfc = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/fc_416.npy')
+    allfc = np.load ('/dhcp/fmri_anna_graham/GKgit/finger_npy/fc_96.npy')
     
     
     sz=allfc.shape
@@ -29,8 +29,8 @@ def loadfc():
 def loadsnr(snrproduct, nsubj, nsess, nroi):
     ## Choose either of these:
     # allsnr = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/416_snr_416_erode1.npy')
-    allsnr = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/416_snr_true.npy')
-    # allsnr = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/96_snr_true.npy')
+    # allsnr = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/416_snr_true.npy')
+    allsnr = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/96_snr_true.npy')
     
 
     mz=allsnr.shape
@@ -114,33 +114,67 @@ if __name__ == '__main__':
     # 374	17Networks_RH_DefaultB_Temp_1
     # 377	17Networks_RH_DefaultB_PFCd_1
 
-    # roisonebased = list(range(149,195))
-    roisonebased = [154,161,167,175,363,368,374,377]
-    # roisonebased = [154,161,167,175]
+    roisonebased = list(range(149,195)) # all DMN on LH Side (range up to 194)
+    # roisonebased = [154,161,167,175,363,368,374,377] # Bilateral LH and RH
+    # roisonebased = [154,161,167,175] # 4roi of DMN on LH Side
 
     roiszerobased=[x-1 for x in roisonebased]
     print(f"These are the roiszerobased: {roiszerobased}")
     print(f"The length of roiszerobased is: {len(roiszerobased)}")
     print()
 
-    fc_iu1 = select_product(allfc_reshaped, roiszerobased, nsubj, nsess)
+    ### Finding out the ROI pair with highest meanFC across sessions:
+    roiconn = []
+    for roiA in roiszerobased:
+        for roiB in roiszerobased:
+            if not roiA==roiB:
+                fc_all = allfc_reshaped[:,roiA,roiB]
+                fc_mean = np.mean(fc_all)
+                roiconn.append([roiA,roiB,fc_mean])
+    df = pd.DataFrame(roiconn, columns =['RoiA', 'RoiB', 'meanFC'])
+    print(df)
+    print()
+    df_sorted = df.sort_values(by = 'meanFC')
+    print(f"This is df_sorted by meanFC:")
+    print(df_sorted)
 
+
+
+
+
+
+    ### Enter the selected "zerobased" pair in here:
+    ### 17Networks_LH_DefaultB_IPL_2	205	62	85	0
+    ### 17Networks_LH_DefaultB_PFCd_1	205	63	77	0
+    pairzerobased = [173,174]
+
+    ### Calculating across all sessions:
+    fc_iu1 = select_product(allfc_reshaped, pairzerobased, nsubj, nsess)
     if snrproduct:
         ### If using select_product:
-        snr_iu1 = select_product(allsnr_reshaped, roiszerobased, nsubj, nsess)
+        snr_iu1 = select_product(allsnr_reshaped, pairzerobased, nsubj, nsess)
     else:
         ### If using selectsnr_adding:
-        snr_iu1 = selectsnr_adding(allsnr_reshaped, roiszerobased, nsubj, nsess)
+        snr_iu1 = selectsnr_adding(allsnr_reshaped, pairzerobased, nsubj, nsess)
 
-    # #######  Option: Standardization??????? I think not!!!!!!
+    # #######  
+    # Option: Standardization?? I think not!!!!!!
     # fc_iu1 = stats.zscore(fc_iu1, axis=1)
     # snr_iu1 = stats.zscore(snr_iu1, axis=1)
 
+    
+    ### Plotting:
     plt.figure(1)
     plt.scatter(np.ravel(fc_iu1), np.ravel(snr_iu1))
+    plt.title('96 sessions \n LH_DefaultB_IPL_2 \n LH_DefaultB_PFCd_1')
+    plt.ylabel('SNR-individual')
+    plt.xlabel('FC')
     plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fingerfigures_misc/SNR_covary_FC.jpg')
 
     plt.figure(2)
     sns.kdeplot(x=np.ravel(fc_iu1), y=np.ravel(snr_iu1))
+    plt.title('96 sessions \n LH_DefaultB_IPL_2 \n LH_DefaultB_PFCd_1')
+    plt.ylabel('SNR-individual')
+    plt.xlabel('FC')
     plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fingerfigures_misc/SNR_covary_FC_kde.jpg')
 
