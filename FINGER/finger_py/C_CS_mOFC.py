@@ -31,7 +31,7 @@ print(within42)
 print()
 
 ## Load Mean OFC for the 42 participants with both OFCs measured:
-data = pd.read_csv('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_data/96twoscanmeanofc.csv', index_col=False)
+data = pd.read_csv('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_data/48_mOFC.csv', index_col=False, header=None, names=["sujbect", "OFC"])
 print('Here is the data for mean ofc:')
 print(data)
 print()

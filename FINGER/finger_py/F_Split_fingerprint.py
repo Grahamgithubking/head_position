@@ -84,7 +84,7 @@ def session2session(allpid, oldersession):
         plt.title('c)', fontsize=20, fontweight="bold") # Edit title
         plt.xlabel('Participants 1 - 48', fontsize=18)
         plt.ylabel('Participants 1 - 48', fontsize=18)
-        plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/splits_figures/RSM_split_older.jpg') #edit older/younger here!
+        plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fc_figures/RSM_split_older.jpg') #edit older/younger here!
     else:
         plt.figure(figsize=(12,8))
         c = plt.imshow(comparesess, cmap='Blues') # Edit color here
@@ -92,44 +92,21 @@ def session2session(allpid, oldersession):
         plt.title('b)', fontsize=20, fontweight="bold") # Edit title
         plt.xlabel('Participants 1 - 48', fontsize=18)
         plt.ylabel('Participants 1 - 48', fontsize=18)
-        plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/splits_figures/RSM_split_younger.jpg') #edit older/younger here!
+        plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fc_figures/RSM_split_younger.jpg') #edit older/younger here!
 
-    #Sort columns according to how well each subject of split A matches each of split B
-    comparesess_sorted=np.argsort(comparesess, axis=0)
-    #Find out the rank of the true match (in column i, where subject i ended up in the sorted ranking)
-    rankofmatch=np.where((comparesess_sorted - np.arange(nsubj))==0)[0]
+    # #Sort columns according to how well each subject of split A matches each of split B
+    # comparesess_sorted=np.argsort(comparesess, axis=0)
+    # #Find out the rank of the true match (in column i, where subject i ended up in the sorted ranking)
+    # rankofmatch=np.where((comparesess_sorted - np.arange(nsubj))==0)[0]
+    # for ind, subj in enumerate(allpid):
+    #     print('%s\t%d'%(subj, rankofmatch[ind]))
+    # print()
 
+    # Identifying whether withinFC is the highest correlation:
+    match = np.diag(comparesess) == np.max(comparesess, axis=0)
     for ind, subj in enumerate(allpid):
-        print('%s\t%d'%(subj, rankofmatch[ind]))
+        print('%s\t%s'%(subj, match[ind]))
     print()
-
-
-    if oldersession:
-        bins=np.arange(0,49,1)-0.5
-        plt.style.use('ggplot')
-        plt.figure(figsize=(16,12))
-        plt.hist(rankofmatch, bins, rwidth=0.5, color='g')
-        plt.xticks(range(0,48,1))
-        plt.xlim([-1, 49])
-        plt.yticks(range(0,48,1))
-        plt.title('Rank of within_subject correlation across split segments for Older Timepoint', fontsize=20, pad=5, loc='center') #edit older/younger here!
-        plt.xlabel('Rank (lowest = 0 to highest = 47)', fontsize=15)
-        plt.ylabel('No. Subjects', fontsize=15)
-        plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/splits_figures/ID_splits_older.png') #edit older/younger here!
-        plt.show()
-    else:
-        bins=np.arange(0,49,1)-0.5
-        plt.style.use('ggplot')
-        plt.figure(figsize=(16,12))
-        plt.hist(rankofmatch, bins, rwidth=0.5, color='g')
-        plt.xticks(range(0,48,1))
-        plt.xlim([-1, 49])
-        plt.yticks(range(0,48,1))
-        plt.title('Rank of within_subject correlation across split segments for Younger Timepoint', fontsize=20, pad=5, loc='center') #edit older/younger here!
-        plt.xlabel('Rank (lowest = 0 to highest = 47)', fontsize=15)
-        plt.ylabel('No. Subjects', fontsize=15)
-        plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/splits_figures/ID_splits_younger.png') #edit older/younger here!
-        plt.show()
 
 
     ## Calculating the difference in correlation meanwithin vs meanbetween:
@@ -179,7 +156,7 @@ def permutation_test(comparesess, mean_within_minus_between, nsubj, iu1, olderse
         plt.title('Fisher 10k - Rank Older', fontsize=20)
         plt.xlabel('No. of Top ranks', fontsize=15)
         plt.ylabel('No. Permutations', fontsize=15)
-        plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/splits_figures/Rank_Fisher_Older.png') #edit name here
+        plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fc_figures/Rank_Fisher_Older.png') #edit name here
         plt.show()
     else:
         plt.figure(figsize=(16,12))
@@ -192,7 +169,7 @@ def permutation_test(comparesess, mean_within_minus_between, nsubj, iu1, olderse
         plt.title('Fisher 10k - Rank Younger', fontsize=20)
         plt.xlabel('No. of Top ranks', fontsize=15)
         plt.ylabel('No. Permutations', fontsize=15)
-        plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/splits_figures/Rank_Fisher_Younger.png') #edit name here
+        plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fc_figures/Rank_Fisher_Younger.png') #edit name here
         plt.show()
 
     if oldersession:
@@ -204,7 +181,7 @@ def permutation_test(comparesess, mean_within_minus_between, nsubj, iu1, olderse
         plt.title('Fisher 10k - Delta r Older', fontsize=20)
         plt.xlabel('Delta r values', fontsize=15)
         plt.ylabel('No. Permutations', fontsize=15)
-        plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/splits_figures/DeltaR_Fisher_Older.png') #edit name here
+        plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fc_figures/DeltaR_Fisher_Older.png') #edit name here
         plt.show()
     else:
         plt.figure(figsize=(16,12))
@@ -215,7 +192,7 @@ def permutation_test(comparesess, mean_within_minus_between, nsubj, iu1, olderse
         plt.title('Fisher 10k - Delta r Younger', fontsize=20)
         plt.xlabel('Delta r values', fontsize=15)
         plt.ylabel('No. Permutations', fontsize=15)
-        plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/splits_figures/DeltaR_Fisher_Younger.png') #edit name here
+        plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fc_figures/DeltaR_Fisher_Younger.png') #edit name here
         plt.show()
 
     within_between_perm = np.mean(shuffle_mean_within_minus_between>=mean_within_minus_between) ##No. of trues divided by 10k
@@ -225,7 +202,7 @@ def permutation_test(comparesess, mean_within_minus_between, nsubj, iu1, olderse
 if __name__ == '__main__':
     
     ##SWITCH for choosing younger vs older session:
-    oldersession = True
+    oldersession = False
 
     allpid, allsessid= get_two_session_subjects()
     comparesess, mean_within_minus_between, nsubj, iu1 = session2session(allpid, oldersession)

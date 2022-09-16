@@ -127,7 +127,7 @@ def session2session(allpid):
     plt.title('a)', fontsize=20, fontweight="bold")
     plt.xlabel('Participants 1 - 48', fontsize=18)
     plt.ylabel('Participants 1 - 48', fontsize=18)
-    plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/acrosssess_figures/RSM_acrosssess.jpg')
+    plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fc_figures/RSM_acrosssess.jpg')
 
     #Sort columns according to how well each subject of the session0 matches each of the session1
     comparesess_sorted=np.argsort(comparesess, axis=0)
@@ -144,12 +144,14 @@ def session2session(allpid):
         print('%s\t%s'%(subj, match[ind]))
     print()
 
-    #Find out the rank of the true match (in column i, where subject i ended up in the sorted ranking)
-    ### Error with code here????????
-    rankofmatch=np.where(((comparesess_sorted - np.arange(nsubj))==0))[0]
-    for ind, subj in enumerate(allpid):
-        print('%s\t%d'%(subj, rankofmatch[ind]))
-    print()
+    # #Find out the rank of the true match (in column i, where subject i ended up in the sorted ranking)
+    # ### Error with code here????????
+    # rankofmatch=np.where(((comparesess_sorted - np.arange(nsubj))==0))[0]
+    # for ind, subj in enumerate(allpid):
+    #     print('%s\t%d'%(subj, rankofmatch[ind]))
+    # print()
+
+
 
 
     bins=np.arange(0,49,1)-0.5

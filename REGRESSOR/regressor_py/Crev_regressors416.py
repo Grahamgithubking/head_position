@@ -14,7 +14,7 @@ import statsmodels.api as sm
 import seaborn as sns
 
 
-def Loading_reshaping():
+def Loading_reshaping(snrcoil, snrtrue):
     #Loading and Reshaping both predicted SNR-HeadPosition data and FC data
     
     allfc = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/fc_416.npy')
@@ -43,17 +43,23 @@ def Loading_reshaping():
     print(nedges)
     print()
 
-    # Getting the Fishers r2z standardization:
-    allfc_fz=np.arctanh(allfc_iu1)
-    print('allfc_fz has shape:')
-    print(allfc_fz.shape)
-    print('Some values of allfc_fz are:')
-    print(allfc_fz[:2,:5])
-    print()
+    allfc = allfc_iu1
+
+    # # Getting the Fishers r2z standardization:
+    # allfc_fz=np.arctanh(allfc_iu1)
+    # print('allfc_fz has shape:')
+    # print(allfc_fz.shape)
+    # print('Some values of allfc_fz are:')
+    # print(allfc_fz[:2,:5])
+    # print()
 
     ######################################
 
-    snr_all = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/snr_416_erode1.npy')
+    if snrcoil:
+        snr_all = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/416_snr_416_erode1.npy')
+    if snrtrue:
+        snr_all = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/416_snr_true.npy')
+
     mz=snr_all.shape
     nsnr=mz[2]
 
@@ -78,20 +84,22 @@ def Loading_reshaping():
     print(allsnr_iu1[:2,:5])
     print()
 
-    # Standardizing the SNR edge values:
-    smean=np.mean(allsnr_iu1, axis=1)
-    sstd=np.std(allsnr_iu1, axis=1)
-    allsnr_sz=np.zeros((nsubj*nsess,nedges))
-    for ind in range(nsubj*nsess):
-        allsnr_sz[ind,:]=(allsnr_iu1[ind,:]-smean[ind,])/sstd[ind,]
-    print('Some values of allsnr_sz are:')
-    print(allsnr_sz[:2,:5])
-    print()
+    allsnr = allsnr_iu1
+
+    # # Standardizing the SNR edge values:
+    # smean=np.mean(allsnr_iu1, axis=1)
+    # sstd=np.std(allsnr_iu1, axis=1)
+    # allsnr_sz=np.zeros((nsubj*nsess,nedges))
+    # for ind in range(nsubj*nsess):
+    #     allsnr_sz[ind,:]=(allsnr_iu1[ind,:]-smean[ind,])/sstd[ind,]
+    # print('Some values of allsnr_sz are:')
+    # print(allsnr_sz[:2,:5])
+    # print()
 
 
-    return allfc_fz, allsnr_sz, nedges
+    return allfc, allsnr, nedges
 
-def Edge_regressors(allfc_fz, allsnr_sz, nedges):
+def Edge_regressors(allfc, allsnr, nedges):
     ## Regression models for EACH edge (across 416 participants with < 1 > session)
      
     parameters=np.zeros((nedges,2)) #nedges OR specify number nedge of 74,691 here!
@@ -99,8 +107,8 @@ def Edge_regressors(allfc_fz, allsnr_sz, nedges):
     r2=np.zeros(nedges)
 
     for r in range(nedges):
-        x=allsnr_sz[:,r]
-        y=allfc_fz[:,r]
+        x=allsnr[:,r]
+        y=allfc[:,r]
 
         X2 = sm.add_constant(x)
         results = sm.OLS(y, X2).fit()
@@ -110,22 +118,27 @@ def Edge_regressors(allfc_fz, allsnr_sz, nedges):
         p[r] = results.pvalues[1]
         r2[r] = results.rsquared
 
+    return parameters, p, r2
 
-
-    print('The parameters array size is:')
-    print(parameters.shape)
-    print()
+    
     ## NOTE: param1 is the constant_value, param2 is the coefficient_x1
-    np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/params_416_erode1.npy', parameters)
-    np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/p_416_erode1.npy', p)
-    np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/r2_416_erode1.npy', r2)
-
-
+    
     
 if __name__ == '__main__':
 
-    allfc_fz, allsnr_sz, nedges = Loading_reshaping()
+    snrcoil = True
+    snrtrue = False
 
-    Edge_regressors(allfc_fz, allsnr_sz, nedges)
+    allfc, allsnr, nedges = Loading_reshaping(snrcoil, snrtrue)
 
+    parameters, p, r2 = Edge_regressors(allfc, allsnr, nedges)
+
+    if snrcoil:
+        np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/params_416_erode1.npy', parameters)
+        np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/p_416_erode1.npy', p)
+        np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/r2_416_erode1.npy', r2)
+    if snrtrue:
+        np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/params_416_snrtrue.npy', parameters)
+
+    
     

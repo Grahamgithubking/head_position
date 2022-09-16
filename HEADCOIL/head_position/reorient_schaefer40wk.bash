@@ -15,26 +15,26 @@ do
     echo $SUBJ $SESS
     echo
 
-    # Chopping out row 576 or 1726 from motion.tsv file:
-    params=$(awk 'NR==576{printf "%.6f\n %.6f\n %.6f\n %.6f\n %.6f\n %.6f\n", $1, $2, $3, $4, $5, $6}' /dhcp/dhcp_fmri_pipeline/${SUBJ}/${SESS}/func/${SUBJ}_${SESS}_motion.tsv)
-    # params=$(awk 'NR==1726{printf "%.6f\n %.6f\n %.6f\n %.6f\n %.6f\n %.6f\n", $1, $2, $3, $4, $5, $6}' /dhcp/dhcp_fmri_pipeline/${SUBJ}/${SESS}/func/${SUBJ}_${SESS}_motion.tsv)
+    # Chopping out row 537 (mid of 0to1073) or 1763 (mid of 1227to2299) from motion.tsv file:
+    # params=$(awk 'NR==537{printf "%.6f\n %.6f\n %.6f\n %.6f\n %.6f\n %.6f\n", $1, $2, $3, $4, $5, $6}' /dhcp/dhcp_fmri_pipeline/${SUBJ}/${SESS}/func/${SUBJ}_${SESS}_motion.tsv)
+    params=$(awk 'NR==1763{printf "%.6f\n %.6f\n %.6f\n %.6f\n %.6f\n %.6f\n", $1, $2, $3, $4, $5, $6}' /dhcp/dhcp_fmri_pipeline/${SUBJ}/${SESS}/func/${SUBJ}_${SESS}_motion.tsv)
     echo $params
 
 
     #Calling python:
-    python par_to_affine.py /dhcp/fmri_anna_graham/rois/${SUBJ}/${SESS}/${SUBJ}_${SESS}_schaefer_40weeks_rois.nii.gz $params --invert > eventrans.mat
+    python /dhcp/fmri_anna_graham/GKgit/head_position/HEADCOIL/par_to_affine.py /dhcp/fmri_anna_graham/rois/${SUBJ}/${SESS}/${SUBJ}_${SESS}_schaefer_40weeks_rois.nii.gz $params --invert > eventrans.mat
     
 
-    ##Reorienting the brainmask: Choose between output 576 and 1726 here:
-    flirt -in /dhcp/fmri_anna_graham/rois/${SUBJ}/${SESS}/${SUBJ}_${SESS}_schaefer_40weeks_rois.nii.gz \
-            -out /dhcp/scanner_positioning/resliced/${SUBJ}/${SESS}/${SUBJ}_${SESS}_schaefer_576.nii.gz \
-            -ref /dhcp/fmri_anna_graham/rois/${SUBJ}/${SESS}/${SUBJ}_${SESS}_schaefer_40weeks_rois.nii.gz \
-            -interp nearestneighbour -init eventrans.mat -applyxfm
-    
+    ##Reorienting the brainmask: Choose between output 537 and 1763 here:
     # flirt -in /dhcp/fmri_anna_graham/rois/${SUBJ}/${SESS}/${SUBJ}_${SESS}_schaefer_40weeks_rois.nii.gz \
-    #         -out /dhcp/scanner_positioning/resliced/${SUBJ}/${SESS}/${SUBJ}_${SESS}_schaefer_1726.nii.gz \
+    #         -out /dhcp/scanner_positioning/resliced/${SUBJ}/${SESS}/${SUBJ}_${SESS}_schaefer_537.nii.gz \
     #         -ref /dhcp/fmri_anna_graham/rois/${SUBJ}/${SESS}/${SUBJ}_${SESS}_schaefer_40weeks_rois.nii.gz \
     #         -interp nearestneighbour -init eventrans.mat -applyxfm
+    
+    flirt -in /dhcp/fmri_anna_graham/rois/${SUBJ}/${SESS}/${SUBJ}_${SESS}_schaefer_40weeks_rois.nii.gz \
+            -out /dhcp/scanner_positioning/resliced/${SUBJ}/${SESS}/${SUBJ}_${SESS}_schaefer_1763.nii.gz \
+            -ref /dhcp/fmri_anna_graham/rois/${SUBJ}/${SESS}/${SUBJ}_${SESS}_schaefer_40weeks_rois.nii.gz \
+            -interp nearestneighbour -init eventrans.mat -applyxfm
 
     echo
     echo

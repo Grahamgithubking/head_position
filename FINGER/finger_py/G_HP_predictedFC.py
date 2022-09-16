@@ -24,7 +24,7 @@ import seaborn as sns
 
 
 def loadarray():
-    # Loading predicted SNR-Headposition values for two head positions per session (vol 576, vol 1726),
+    # Loading predicted SNR-Headposition values for two head positions per session (vol 537, vol 1763),
     # for all sessions of the 48 particpants with both preterm and term sessions
     snr_all = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/192hp_snr.npy')
     mz=snr_all.shape
@@ -71,7 +71,7 @@ def loadarray():
 def predicted_fc(allsnr_iu1, nedges):
     ### Calculating the predicted fc using OLS parameters and edge-level products of predicted SNR-HeadPosition values for 2 head positions
 
-    parameters=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/params_416_erode.npy') #Edit name here
+    parameters=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/params_416_erode1.npy') #Edit name here
     print('The shape of parameters array is:')
     print(parameters.shape)
     print()
@@ -89,7 +89,7 @@ def predicted_fc(allsnr_iu1, nedges):
 
     return predicted
 
-def fingerprint(oldersession, acrosssession, predicted, nsubj):
+def fingerprint(oldersession, youngersession, acrosssession, predicted, nsubj):
 
     ## Second order Spearman correlation:
     sessim, pval=stats.spearmanr(predicted.T)
@@ -97,7 +97,7 @@ def fingerprint(oldersession, acrosssession, predicted, nsubj):
     print(sessim.shape)
     print()
 
-    #Find all the points comparing across subjects and sessions for 1 head position, position volume 576, only:
+    #Find all the points comparing across subjects and sessions for 1 head position, position volume 537, only:
     if acrosssession:
         comparesess=sessim[2::4,0::4] #this chooses across session values for position 576
         print('the shape of across session comparehp is:')
@@ -118,28 +118,24 @@ def fingerprint(oldersession, acrosssession, predicted, nsubj):
         plt.title('RSM of Predicted FC values across sessions \n (using one head position)', fontsize=20, fontweight="bold") # Edit title
         plt.xlabel('Participants No.', fontsize=18)
         plt.ylabel('Participants No.', fontsize=18)
-        plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/hp_figures/RSM_predFC_acrosssess.png')
+        plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/predFC_figures/RSM_predFC_acrosssess.png')
 
-        #Sort columns according to how well a subject's HP576 correlates across sessions:
-        comparesess_sorted=np.argsort(comparesess, axis=0)
-        #Find out the rank of the true match (in column i, where subject i ended up in the sorted ranking)
-        ranksess=np.where((comparesess_sorted - np.arange(nsubj))==0)[0]
 
-    #Find all the points comparing across subjects and across head positions (HP576 vs HP1726) within each session:
+    #Find all the points comparing across subjects and across head positions (HP537 vs HP1763) within each session:
     if oldersession:
-        comparehp=sessim[2::4,3::4] #this chooses the older session/timepoint
+        comparesess=sessim[2::4,3::4] #this chooses the older session/timepoint
         print('the shape of older comparehp is:')
-        print(comparehp.shape)
+        print(comparesess.shape)
         print()
-    else:
-        comparehp=sessim[0::4,1::4] #this chooses the younger session/timepoint
+    if youngersession:
+        comparesess=sessim[0::4,1::4] #this chooses the younger session/timepoint
         print('the shape of younger comparehp is:')
-        print(comparehp.shape)
+        print(comparesess.shape)
         print()
 
     if oldersession:
         plt.figure(figsize=(12,8))
-        c = plt.imshow(comparehp, cmap='Reds') # Edit color here
+        c = plt.imshow(comparesess, cmap='Reds') # Edit color here
         plt.colorbar(c)
         x = np.arange(1,49,1) # the grid to which your data corresponds
         nx = x.shape[0]
@@ -152,10 +148,10 @@ def fingerprint(oldersession, acrosssession, predicted, nsubj):
         plt.title('b)', fontsize=20, fontweight="bold") # Edit title
         plt.xlabel('Participant No.', fontsize=18)
         plt.ylabel('Participant No.', fontsize=18)
-        plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/hp_figures/RSM_predFC_older.jpg') #edit older/younger here!
-    else:
+        plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/predFC_figures/RSM_predFC_older.jpg') #edit older/younger here!
+    if youngersession:
         plt.figure(figsize=(12,8))
-        c = plt.imshow(comparehp, cmap='Blues') # Edit color here
+        c = plt.imshow(comparesess, cmap='Blues') # Edit color here
         plt.colorbar(c)
         x = np.arange(1,49,1) # the grid to which your data corresponds
         nx = x.shape[0]
@@ -168,59 +164,19 @@ def fingerprint(oldersession, acrosssession, predicted, nsubj):
         plt.title('a)', fontsize=20, fontweight="bold") # Edit title
         plt.xlabel('Participant No.', fontsize=18)
         plt.ylabel('Participant No.', fontsize=18)
-        plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/hp_figures/RSM_predFC_younger.jpg') #edit older/younger here!
+        plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/predFC_figures/RSM_predFC_younger.jpg') #edit older/younger here!
 
-    #Sort columns according to how well each subject at HP576 correlates with other subjects' HP1726:
-    comparehp_sorted=np.argsort(comparehp, axis=0)
-    #Find out the rank of the true match (in column i, where subject i ended up in the sorted ranking)
-    rankofmatch=np.where((comparehp_sorted - np.arange(nsubj))==0)[0]
-
-    #### Plotting Ranking figures:
-    if oldersession:
-        bins=np.arange(0,49,1)-0.5
-        plt.style.use('ggplot')
-        plt.figure(figsize=(16,12))
-        plt.hist(rankofmatch, bins, rwidth=0.5, color='g')
-        plt.xticks(range(0,48,1))
-        plt.xlim([-1, 49])
-        plt.yticks(range(0,48,1))
-        plt.title('Rank of within_participant correlation for Term Session', fontsize=20, pad=5, loc='center') #edit older/younger here!
-        plt.xlabel('Rank (lowest = 0 to highest = 47)', fontsize=15)
-        plt.ylabel('No. Subjects', fontsize=15)
-        plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/hp_figures/ID_predFC_older.png') #edit older/younger here!
-        plt.show()
-    else:
-        bins=np.arange(0,49,1)-0.5
-        plt.style.use('ggplot')
-        plt.figure(figsize=(16,12))
-        plt.hist(rankofmatch, bins, rwidth=0.5, color='g')
-        plt.xticks(range(0,48,1))
-        plt.xlim([-1, 49])
-        plt.yticks(range(0,48,1))
-        plt.title('Rank of within_participant correlation for Preterm Session', fontsize=20, pad=5, loc='center') #edit older/younger here!
-        plt.xlabel('Rank (lowest = 0 to highest = 47)', fontsize=15)
-        plt.ylabel('No. Subjects', fontsize=15)
-        plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/hp_figures/ID_predFC_younger.png') #edit older/younger here!
-        plt.show()
-    if acrosssession:
-        bins=np.arange(0,49,1)-0.5
-        plt.style.use('ggplot')
-        plt.figure(figsize=(16,12))
-        plt.hist(ranksess, bins, rwidth=0.5, color='g')
-        plt.xticks(range(0,48,1))
-        plt.xlim([-1, 49])
-        plt.yticks(range(0,48,1))
-        plt.title('Rank of within_participant correlation Across Sessions', fontsize=20, pad=5, loc='center') 
-        plt.xlabel('Rank (lowest = 0 to highest = 47)', fontsize=15)
-        plt.ylabel('No. Subjects', fontsize=15)
-        plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/hp_figures/ID_predFC_acrosssess.png')
-        plt.show()
+    # Identifying whether within_predFC is the highest correlation:
+    match = np.diag(comparesess) == np.max(comparesess, axis=0)
+    for ind in range(48):
+        print('%s'%(match[ind]))
+    print()   
 
 
-    ## Calculating the difference in correlation meanwithin vs meanbetween:
+    ## Calculating the difference in predFC correlation meanwithin vs meanbetween:
     iu1 = np.triu_indices(nsubj, k=1)
-    within = np.diag(comparehp)
-    between = comparehp[iu1]
+    within = np.diag(comparesess)
+    between = comparesess[iu1]
 
     mean_within = np.mean(within)
     print(f'Second level correlation - Mean within subject:{mean_within}')
@@ -235,10 +191,11 @@ def fingerprint(oldersession, acrosssession, predicted, nsubj):
 if __name__ == '__main__':
     
     ##SWITCHES for choosing acrosssessions or younger_vs_older session:
-    oldersession = True
+    oldersession = False
+    youngersession = False
     acrosssession = True
 
     allsnr_iu1, nedges, nsubj = loadarray()
     predicted = predicted_fc(allsnr_iu1, nedges)
-    fingerprint(oldersession, acrosssession, predicted, nsubj)
+    fingerprint(oldersession, youngersession, acrosssession, predicted, nsubj)
 
