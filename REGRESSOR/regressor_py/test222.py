@@ -210,21 +210,51 @@ from scipy.stats import bootstrap
 
 #####################################
 
-regions = list(np.arange(8))
-print(regions)
+# regions = list(np.arange(8))
+# print(regions)
+# print()
+# values = np.arange(8)
+# print(values)
+# print()
+
+# allvalues = []
+# print(allvalues)
+# print()
+
+# for ind, roi in enumerate(regions):
+#     for indb, roib in enumerate(regions):
+#         if indb > ind:
+#             value = values[roi] + values[roib]
+#             allvalues.append(value)
+# print()
+# print(allvalues)
+
+
+
+###################################################
+
+
+# snrcoil=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/192hp_snr.npy')
+# print(snrcoil.shape)
+# snrcoil=np.mean(snrcoil, axis=(2,3))
+# print(snrcoil.shape)
+# print(snrcoil[:3,:])
+# print()
+# print(snrcoil[:,0])
+
+#######################################################
+
+withinfcpreterm=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48withinfc_splitspreterm.npy')
+withinfcterm=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48withinfc_splitsterm.npy')
+print(withinfcpreterm)
 print()
-values = np.arange(8)
-print(values)
+print(withinfcterm)
+print()
+# withinfcboth=np.concatenate((withinfcpreterm,withinfcterm), axis=1)
+withinfcboth=np.vstack((withinfcpreterm,withinfcterm))
+withinfcboth=withinfcboth.T
+print(withinfcboth.shape)
+print(withinfcboth)
 print()
 
-allvalues = []
-print(allvalues)
-print()
 
-for ind, roi in enumerate(regions):
-    for indb, roib in enumerate(regions):
-        if indb > ind:
-            value = values[roi] + values[roib]
-            allvalues.append(value)
-print()
-print(allvalues)

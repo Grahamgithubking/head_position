@@ -42,8 +42,10 @@ print()
 print(f"Here is the list of yterm: {yterm}")
 print()
 print()
-print(min(yprem))
-print(max(yprem))
+print(f"The min of y is: {min(yprem)}")
+print(f"The max of y is: {max(yprem)}")
+print(f"The min of x is: {min(xprem)}")
+print(f"The max of x is: {max(xprem)}")
 print()
 
 plt.figure(1)
@@ -51,10 +53,6 @@ plt.figure(1)
 # sns.kdeplot(x=(xterm), y=(yterm), color='blue')
 plt.scatter(x=(xprem), y=(yprem), c='red')
 plt.scatter(x=(xterm), y=(yterm), c='blue')
-
-# plt.scatter(x=(top_xprem), y=(top_yprem), c='yellow', marker="D") # To identfy 3 participants who fingerprinted
-# plt.scatter(x=(top_xterm), y=(top_yterm), c='green', marker="D") # To identfy 3 participants who fingerprinted
-
 plt.xticks(range(int(min(yprem)),int(max(yprem))+1,4))
 plt.yticks(range(int(min(yprem)),int(max(yprem))+1,4))
 plt.xlim([-15,30])
@@ -66,4 +64,9 @@ plt.legend(('Preterm', 'Term'), loc='upper right', fontsize=10, labelcolor=('red
 
 ### Save out:
 plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fingerfigures_misc/centroidplot.jpg')
+
+### If want to see the 3 participants who fingerprinted successfully:
+# plt.scatter(x=(top_xprem), y=(top_yprem), c='yellow', marker="D") # To identfy 3 participants who fingerprinted
+# plt.scatter(x=(top_xterm), y=(top_yterm), c='green', marker="D") # To identfy 3 participants who fingerprinted
+# plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fingerfigures_misc/centroidplot_tops.jpg')
 

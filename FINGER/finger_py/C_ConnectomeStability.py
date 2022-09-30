@@ -86,7 +86,13 @@ def create_dataframe(allpid, allsubject_mean, allsubject_max):
     print('the length of the snrmismean array is:', len(snrmismean))
     print()
 
-    datacolumns = {'Participants':(allpid), 'Mean FWD':(allsubject_mean), 'Max FWD':(allsubject_max), 'Within Subj fc':(withinfc), 'Snrmismean':(snrmismean)}
+    acrossmean= np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48_mFC.npy')
+    print('the length of the 48_mFC array is:', len(acrossmean))
+    print()
+
+    delta_mean = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48_deltaFC.npy')
+
+    datacolumns = {'Participants':(allpid), 'Mean FWD':(allsubject_mean), 'Max FWD':(allsubject_max), 'Within Subj fc':(withinfc), 'Snrmismean':(snrmismean), '48_mFC':(acrossmean), '48_deltaFC':(delta_mean)}
     df = pd.DataFrame(datacolumns)
     # df.set_index('Participants')
     pd.set_option('display.max_rows', df.shape[0]+1)
@@ -111,7 +117,7 @@ def adding_age_data(df):
     print()
 
     #Saving dataframe to .csv file:
-    df_merge.to_csv('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_data/df_merge_withinfc.csv')
+    df_merge.to_csv('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_data/df_merge_withinfc.csv')
     print('The merged dataframe has been saved to .csv file')
     print()
 
@@ -136,7 +142,7 @@ def gettingplots(allsubject_mean, allsubject_max, withinfc, agelist, scan1list, 
     plt.title('Connectome Stability vs Birth Gestation')
     plt.xlabel('Birth Gestation (PMA weeks)')
     plt.ylabel('Connectome Stability')
-    plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/fingerfigures_misc/birthgest_withinfp_sess1age.jpg')
+    plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fingerfigures_misc/birthgest_withinfp_sess1age.jpg')
 
     plt.figure(2)
     norm=Normalize()
@@ -147,7 +153,7 @@ def gettingplots(allsubject_mean, allsubject_max, withinfc, agelist, scan1list, 
     plt.title('Connectome Stability vs Birth Gestation')
     plt.xlabel('Birth Gestation (PMA weeks)')
     plt.ylabel('Connectome Stability')
-    plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/fingerfigures_misc/birthgest_withinfc_meanfwd.jpg')
+    plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fingerfigures_misc/birthgest_withinfc_meanfwd.jpg')
 
     plt.figure(3)
     plt.scatter(x=(scanint), y=(withinfc), c='grey')
@@ -157,7 +163,7 @@ def gettingplots(allsubject_mean, allsubject_max, withinfc, agelist, scan1list, 
     plt.xlabel('Inter-session interval (weeks)', fontsize=13)
     plt.ylabel('Connectome Stability', fontsize=13)
     plt.legend(['r=-0.48, *p<0.0005'], loc='upper right', fontsize=13)
-    plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/acrosssess_figures/CS_vs_scanint.jpg')
+    plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/acrosssess_figures/CS_vs_scanint.jpg')
 
     plt.figure(4)
     plt.scatter(x=(allsubject_mean), y=(withinfc), c='grey')
@@ -167,20 +173,33 @@ def gettingplots(allsubject_mean, allsubject_max, withinfc, agelist, scan1list, 
     plt.xlabel('Mean FWD', fontsize=13)
     plt.ylabel('Connectome Stability', fontsize=13)
     plt.legend(['r=-0.47, *p<0.0008'], loc='upper right', fontsize=13)
-    plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/acrosssess_figures/CS_vs_mFWD.jpg')
+    plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/acrosssess_figures/CS_vs_mFWD.jpg')
 
 
 #######   Statistics, Partial Correlation coefficients_pearson with a single control:
-
 
     pc_one = pg.corr(scanint, withinfc, tail='two-sided', method='pearson')
     print('The pearson correlation coefficient for Scan Interval and Within-Subject Connectome is:')
     print(pc_one)
     print()
 
+    ppc_1a = pg.partial_corr(data=df_merge, x=('scanint'), y=('Within Subj fc'), covar=['Snrmismean'], tail='two-sided', method='pearson')
+    print('The partial correlation between Scan Interval and Within Subj fc, controlling for mean_SNRgroup, is:')
+    print(ppc_1a)
+    print()
+
+    ppc_1b = pg.partial_corr(data=df_merge, x=('scanint'), y=('Within Subj fc'), covar=['48_deltaFC'], tail='two-sided', method='pearson')
+    print('The partial correlation between Scan Interval and Within Subj fc, controlling for 48_deltaFC, is:')
+    print(ppc_1b)
+    print()
+
     pc_two = pg.corr(allsubject_mean, withinfc, tail='two-sided', method='pearson')
     print('The pearson correlation coefficient for Mean FWD and Within-Subject Connectome is:')
     print(pc_two)
+    
+    ppc_two = pg.partial_corr(data=df_merge, x=('Mean FWD'), y=('Within Subj fc'), covar=['Snrmismean'], tail='two-sided', method='pearson')
+    print('The partial correlation between Mean FWD and Within Subj fc, controlling for snr_mean, is:')
+    print(ppc_two)
     print()
 
     pc_three = pg.corr(agelist, withinfc, tail='two-sided', method='pearson')
@@ -229,13 +248,13 @@ if __name__ == '__main__':
     dhcp_root='/dhcp/dhcp_fmri_pipeline'
     
     allpid, allsessid= get_two_session_subjects()
-    print(allpid)
-    print()
-
+   
     allsubject_mean, allsubject_max= calc_fwd(dhcp_root, allsessid)
 
-    withinfc, df= create_dataframe(allpid, allsubject_mean, allsubject_max)
+    withinfc, df = create_dataframe(allpid, allsubject_mean, allsubject_max)
 
     df_merge, agelist, scan1list, scan2list, scanint = adding_age_data(df)
     
     gettingplots(allsubject_mean, allsubject_max, withinfc, agelist, scan1list, scan2list, scanint, df_merge)
+
+    

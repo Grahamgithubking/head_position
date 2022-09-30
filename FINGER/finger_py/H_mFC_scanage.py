@@ -40,9 +40,19 @@ print(preterm_mean.shape)
 term_mean=sessmean[:,1]
 print('The shape of term_mean is:')
 print(term_mean.shape)
+acrossmean=sessmean.mean(axis=1)
+print('The shape of acrossmean is:')
+print(acrossmean.shape)
+np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48_mFC.npy', acrossmean)
+delta_mean=term_mean - preterm_mean
+print('The shape of delta_mean is:')
+print(delta_mean.shape)
+np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48_deltaFC.npy', delta_mean)
+
+
 
 ## Loading in scan age data:
-df_age=pd.read_csv('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/48subjbirth_noRS.csv')
+df_age=pd.read_csv('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_data/48subjbirth_noRS.csv')
 print('The imported birth dataframe is:')
 print(df_age)
 print()
@@ -59,5 +69,5 @@ plt.title('b)', fontsize=15, fontweight="bold")
 plt.xlabel('PMA at session', fontsize=13)
 plt.ylabel('Mean fc at session', fontsize=13)
 plt.legend(('Session 1', 'Session 2'), labelcolor=('red', 'blue'))
-plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/acrosssess_figures/mFC_vs_scanage.jpg')
+plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fc_figures/mFC_vs_scanage.jpg')
 

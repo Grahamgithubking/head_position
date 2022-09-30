@@ -113,6 +113,10 @@ def session2session(allpid, oldersession):
     iu1 = np.triu_indices(nsubj, k=1)
     within = np.diag(comparesess)
     between = comparesess[iu1]
+    if oldersession:
+        np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48withinfc_splitsterm.npy', within)
+    else:
+        np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48withinfc_splitspreterm.npy', within)
 
     mean_within = np.mean(within)
     print(f'Second level correlation - Mean within subject:{mean_within}')
@@ -202,7 +206,7 @@ def permutation_test(comparesess, mean_within_minus_between, nsubj, iu1, olderse
 if __name__ == '__main__':
     
     ##SWITCH for choosing younger vs older session:
-    oldersession = False
+    oldersession = True
 
     allpid, allsessid= get_two_session_subjects()
     comparesess, mean_within_minus_between, nsubj, iu1 = session2session(allpid, oldersession)

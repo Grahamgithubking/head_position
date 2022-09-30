@@ -17,7 +17,7 @@ do
         # fslstats -c = output centerofgravity in mm coordinates
         # fslstats -C = output centerofgravity in voxel coordinates
 
-    ### Tried the BrainExtractionTool BET T2w brainmas:
+    ### Tried the BrainExtractionTool BET T2w brainmask:
     # fslstats /dhcp/dhcp_anat_pipeline/${SUBJ}/${SESS}/anat/${SUBJ}_${SESS}_desc-bet_space-T2w_brainmask.nii.gz -c | tee -a /dhcp/fmri_anna_graham/GKgit/head_position/HEADCOIL/head_position/48preterm.txt
 
     ### Using bold_brainmask:

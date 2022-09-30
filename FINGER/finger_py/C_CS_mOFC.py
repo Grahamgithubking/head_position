@@ -31,7 +31,7 @@ print(within42)
 print()
 
 ## Load Mean OFC for the 42 participants with both OFCs measured:
-data = pd.read_csv('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_data/48_mOFC.csv', index_col=False, header=None, names=["sujbect", "OFC"])
+data = pd.read_csv('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_data/48_mOFC.csv', index_col=False, header=None, names=["subject", "OFC"])
 print('Here is the data for mean ofc:')
 print(data)
 print()
@@ -39,6 +39,7 @@ meanofc = data["OFC"].tolist()
 print('Here is the list of Mean OFC:')
 print(meanofc)
 print()
+meanofc = np.delete(meanofc, index)
 
 
 plt.figure(1)
@@ -49,10 +50,42 @@ plt.title('a)', fontsize=15, fontweight="bold")
 plt.xlabel('Mean OFC', fontsize=13)
 plt.ylabel('Connectome Stability', fontsize=13)
 plt.legend(['r=0.42, *p<0.005'], loc='lower right', fontsize=13)
-plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/acrosssess_figures/CS_vs_OFC.jpg')
+plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/acrosssess_figures/CS_vs_OFC.jpg')
 
 pc1 = pg.corr(meanofc, within42, tail='two-sided', method='pearson')
 print('The pearson correlation coefficient for Mean OFC and Within-Subject Connectome is:')
 print(pc1)
 print()
 
+
+### Using SNR_true values:
+snr_96=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/96_snr_true.npy')
+print('the shape of the snr_96 array is:')
+print(snr_96.shape)
+print()
+snr_mean=snr_96.mean(axis=2).mean(axis=1)
+print('The shape of snrmean is:')
+print(snr_mean.shape)
+print()
+print('All values of snrmean are:')
+print(snr_mean)
+print()
+
+# ### Using SNR-group values:
+# snr_mean=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/snrmismean.npy')
+
+
+
+##################################################
+meansnr = np.delete(snr_mean, index)
+
+datacolumns = {'CS':(within42), 'mofc':(meanofc), 'msnr':(meansnr)}
+df = pd.DataFrame(datacolumns)
+pd.set_option('display.max_rows', df.shape[0]+1)
+print(df)
+print()
+
+ppc_one = pg.partial_corr(data=df, x=('mofc'), y=('CS'), covar=['msnr'], tail='two-sided', method='pearson')
+print('The partial correlation between mOFC and CS, controlling for mSNR(true/group), is:')
+print(ppc_one)
+print()
