@@ -51,10 +51,6 @@ def loadfc(one_sessid, two_sessid):
     print(nedges)
     print()
 
-    ###### Getting the Fishers r2z standardization:
-    # allfc_fish=np.arctanh(allfc_iu1)
-
-
     return allfc_iu1, nsubj, nsess, nroi, nedges
 
 def loadsnr(one_sessid, two_sessid, snrcoil, snrtrue, nsubj, nsess, nroi, nedges):
@@ -101,9 +97,13 @@ def regressors(one_sessid, two_sessid, allfc_iu1, allsnr_iu1, nedges, nsubj, snr
         p=np.zeros(nedges)
         r2=np.zeros(nedges)
 
+        ### Standardizing:
+        allsnr_iu1=stats.zscore(allsnr_iu1, axis=1)
+        allfc_iu1=stats.zscore(allfc_iu1, axis=1)
+
         for r in range(nedges):
-            x=allsnr_sz[:,r]
-            y=allfc_sz[:,r]
+            x=allsnr_iu1[:,r]
+            y=allfc_iu1[:,r]
 
             X2 = sm.add_constant(x)
             results = sm.OLS(y, X2).fit()
@@ -117,10 +117,17 @@ def regressors(one_sessid, two_sessid, allfc_iu1, allsnr_iu1, nedges, nsubj, snr
         print(parameters.shape)
         print()
         ## NOTE: param1 is the constant_value, param2 is the coefficient_x1
-        np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/74691_params_snr_416_erode1.npy', parameters)
-        np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/74691_p_snr_416_erode1.npy', p)
-        np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/74691_r2_snr_416_erode1.npy', r2)
+        
+        if snrcoil:
+            np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/74691_params_snr_416_erode1.npy', parameters)
+            np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/74691_p_snr_416_erode1.npy', p)
+            np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/74691_r2_snr_416_erode1.npy', r2)
+        if snrtrue:
+            np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/74691_params_snrtrue.npy', parameters)
 
+
+        
+        
     if two_sessid: # allsnr_iu1 has size [96,74691]  # allfc_iu1 has size [96,74691]
         
         if sess1:
@@ -270,8 +277,8 @@ def regressors(one_sessid, two_sessid, allfc_iu1, allsnr_iu1, nedges, nsubj, snr
     
 if __name__ == '__main__':
 
-    one_sessid=False
-    two_sessid=True
+    one_sessid=True
+    two_sessid=False
 
     subjectlevel=False  #subjectlevel is: regressors across edges
     edgelevel=True  #edgelevel is: regressors across subjects
@@ -281,7 +288,7 @@ if __name__ == '__main__':
     snrcoil=True  # aka SNR-Coil
     snrtrue=False # Turn this off if using snrfcy!
 
-    sess1=True
+    sess1=False
     sess2=False
 
     snrfcy1=False  # Here the SNR values (set to SNR-Coil) are from the same session as FCy

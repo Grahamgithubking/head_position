@@ -244,17 +244,37 @@ from scipy.stats import bootstrap
 
 #######################################################
 
-withinfcpreterm=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48withinfc_splitspreterm.npy')
-withinfcterm=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48withinfc_splitsterm.npy')
-print(withinfcpreterm)
-print()
-print(withinfcterm)
-print()
-# withinfcboth=np.concatenate((withinfcpreterm,withinfcterm), axis=1)
-withinfcboth=np.vstack((withinfcpreterm,withinfcterm))
-withinfcboth=withinfcboth.T
-print(withinfcboth.shape)
-print(withinfcboth)
-print()
+# withinfcpreterm=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48withinfc_splitspreterm.npy')
+# withinfcterm=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48withinfc_splitsterm.npy')
+# print(withinfcpreterm)
+# print()
+# print(withinfcterm)
+# print()
+# # withinfcboth=np.concatenate((withinfcpreterm,withinfcterm), axis=1)
+# withinfcboth=np.vstack((withinfcpreterm,withinfcterm))
+# withinfcboth=withinfcboth.T
+# print(withinfcboth.shape)
+# print(withinfcboth)
+# print()
+
+#############################################################
+
+
+a=np.array(((1,3,6),(3,7,1)))
+b=np.array(((11,8,45),(2,19,10)))
+
+print(a)
+print(a.shape)
+print(type(a))
+
+
+
+
+correl=np.corrcoef(a, b)
+print('This is correl:')
+print(correl)
+print(correl.shape)
+
+
 
 

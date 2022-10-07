@@ -1,8 +1,3 @@
-#### All original code is copyright of Graham King, Trinity College Institute of Neuroscience.
-
-### Using predicted SNR-HeadPosition and corresponding Fuctional Connectivity data to calculate the parameters of 74,691 linear regressors across 48 participants with two sessions
-### Note: The raw SNR data from these 48 participants was NOT used to create the SNR-Coil (SNR of the Coil). This is an independant group.
-
 import pandas as pd
 import numpy as np
 import glob
@@ -13,7 +8,6 @@ from scipy import stats
 import pingouin as pg
 import statsmodels.api as sm
 import seaborn as sns
-
 
 def Loading_reshaping():
     
@@ -60,45 +54,56 @@ def Loading_reshaping():
 
     return allfc_iu1, allsnr_iu1, nedges
 
-def Edge_regressors(allfc_iu1, allsnr_iu1, nedges):
-    ## Regression models for EACH edge (across 48 participants with < 2 > sessions):
+def predicted_fc(allsnr_iu1, nedges):
+    ### Calculating the predicted fc using OLS parameters and edge-level products of predicted SNR-group values
 
-    parameters=np.zeros((nedges,2)) #nedges
-    p=np.zeros(nedges)
-    r2=np.zeros(nedges)
-
-    ### Standardizing:
-    allsnr_iu1=stats.zscore(allsnr_iu1, axis=1)
-    allfc_iu1=stats.zscore(allfc_iu1, axis=1)
-
-    for r in range(nedges): #nedges OR specify number nedge of 74,691 here!
-        x=allsnr_iu1[:,r]
-        y=allfc_iu1[:,r]
-
-        X2 = sm.add_constant(x)
-        results = sm.OLS(y, X2).fit()
-        ## y = c + mx where (c, m) are parameters
-        ## NOTE: param1 is the constant_value, param2 is the coefficient_x1
-        parameters[r] = results.params
-        p[r] = results.pvalues[1]
-        r2[r] = results.rsquared
-
-
-    print('The parameters array size is:')
+    parameters=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/74691_params_snr_416_erode1.npy') # parameters from 416 sessions
+    print('The shape of parameters array is:')
     print(parameters.shape)
     print()
-    ## NOTE: param1 is the constant_value, param2 is the coefficient_x1
-    np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/74691_params_snr_416_erode1_indep96.npy', parameters)
+
+    predicted=np.zeros((96, nedges))
+    for parind, (c, m) in enumerate(parameters):
+        ## y = c + mx
+        fit = c + m*allsnr_iu1[:, parind]
+        predicted[:, parind]=fit
+    ## predicted array size [96, 74691]
+    print('Some values of predicted array are:')
+    print(predicted[0:2,0:10])
+    print()
+
+    return predicted
+
+def correlation(predicted, allfc_iu1):
+
+    ## Second order Spearman correlation:
+    correl = np.corrcoef(predicted, allfc_iu1)
+    print('The shape of the correl matrix is:')
+    print(correl.shape)
+    print()
+
+    compare=correl[0:96:1,96::1] # The upper right quadrant of the 192x192 matrix
+    diagonal=np.diag(compare) # The diagonal = This is the correlation values between empirical vs predicted FC for each of 96 sessions.
+    print(f"The shape of diagonal is: {diagonal.shape}")
+    print(f"Some values of diagonal are:")
+    print(diagonal[:10])
+    print()
+
+    print('The mean of the diagonal values is:')
+    print(np.mean(diagonal))
+    print()
+
+    plt.figure(1)
+    sns.distplot(diagonal, kde=True) 
+    plt.xlabel('Correlation (Pearson)')
+    plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fingerfigures_misc/emp_v_pred.jpg') # Edit name here!
 
 
-    
+
 if __name__ == '__main__':
 
     allfc_iu1, allsnr_iu1, nedges = Loading_reshaping()
 
-    Edge_regressors(allfc_iu1, allsnr_iu1, nedges)
+    predicted = predicted_fc(allsnr_iu1, nedges)
 
-    
-
-
-
+    correlation(predicted, allfc_iu1)

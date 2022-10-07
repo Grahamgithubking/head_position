@@ -29,18 +29,6 @@ bootstrapping=False
 
 filepath='/dhcp/fmri_anna_graham/GKgit/snr_npy/'
 
-######################################
-## the shape of the regressors parameters 2-D array is: [74691, 2]
-## y = c + mx, where (c, m) are in parameters
-
-# parameters=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/74691_params_snr_416_erode1.npy') # Edit name here!
-
-# plt.figure(1)
-# sns.distplot(parameters[:,1:], kde=True) # choosing m values (aka Beta values, the slopes)
-# # plt.title('Histogram of the Beta values of 74,691 linear regressors \n across 416 participants')
-# plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/REGRESSOR/regressor_figures/416_m_erode1.jpg') # Edit name here!
-
-
 #######################################
 ## the shape of the regressors parameters 2-D array is: [48, 3]
 ## y = c + m1x + m2x,  where (c, m1, m2) are in parameters
