@@ -37,12 +37,20 @@ def get_two_session_subjects():
             for sid in df_sess['session_id']:
                 allsessid[pid].append(sid)
 
+    del_pid=['CC00191XX11', 'CC00518XX15', 'CC00672AN13', 'CC00770XX12']
+    for pid in del_pid:
+        allpid.remove(pid)
+        del allsessid[pid]
+    print(f"This is the updated allpid: \n {allpid}")
+    print(f"This is the updated allsessid: \n {allsessid}")
+    print()
+
     return allpid, allsessid
 
 
 def session2session(allpid, oldersession):
     # loading split segment first order pearson correlations as allfc
-    allfc = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/192fc.npy')
+    allfc = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/176fc.npy')
     sz=allfc.shape
     print('starting allfc shape is:')
     print(sz)
@@ -57,9 +65,9 @@ def session2session(allpid, oldersession):
     print(allfc_reshaped.shape)
 
 
-    ## Spearman second order correlation across 192 split segments:
+    ## Spearman second order correlation across 176 split segments:
     sessim, pval=stats.spearmanr(allfc_reshaped.T)
-    print('the shape of the sessim matrix is:') # this is a 192x192 matrix
+    print('the shape of the sessim matrix is:') # this is a 176x176 matrix
     print(sessim.shape)
     print()
 
@@ -82,16 +90,16 @@ def session2session(allpid, oldersession):
         c = plt.imshow(comparesess, cmap='Reds') # Edit color here
         plt.colorbar(c)
         plt.title('c)', fontsize=20, fontweight="bold") # Edit title
-        plt.xlabel('Participants 1 - 48', fontsize=18)
-        plt.ylabel('Participants 1 - 48', fontsize=18)
+        plt.xlabel('Participants 1 - 44', fontsize=18)
+        plt.ylabel('Participants 1 - 44', fontsize=18)
         plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fc_figures/RSM_split_older.jpg') #edit older/younger here!
     else:
         plt.figure(figsize=(12,8))
         c = plt.imshow(comparesess, cmap='Blues') # Edit color here
         plt.colorbar(c)
         plt.title('b)', fontsize=20, fontweight="bold") # Edit title
-        plt.xlabel('Participants 1 - 48', fontsize=18)
-        plt.ylabel('Participants 1 - 48', fontsize=18)
+        plt.xlabel('Participants 1 - 44', fontsize=18)
+        plt.ylabel('Participants 1 - 44', fontsize=18)
         plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fc_figures/RSM_split_younger.jpg') #edit older/younger here!
 
     # #Sort columns according to how well each subject of split A matches each of split B
@@ -114,9 +122,9 @@ def session2session(allpid, oldersession):
     within = np.diag(comparesess)
     between = comparesess[iu1]
     if oldersession:
-        np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48withinfc_splitsterm.npy', within)
+        np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/44withinfc_splitsterm.npy', within)
     else:
-        np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48withinfc_splitspreterm.npy', within)
+        np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/44withinfc_splitspreterm.npy', within)
 
     mean_within = np.mean(within)
     print(f'Second level correlation - Mean within subject:{mean_within}')
@@ -140,7 +148,7 @@ def permutation_test(comparesess, mean_within_minus_between, nsubj, iu1, olderse
         rankofshuffle=np.where((shufflerows_sorted - np.arange(nsubj))==0)[0]
 
         ##permutations for toprank:
-        topshuffle = np.where(rankofshuffle>=47)[0]
+        topshuffle = np.where(rankofshuffle>=43)[0]
         lengthtopshuffle = len(topshuffle)
         alltopshuffle.append(lengthtopshuffle)
 
@@ -151,10 +159,10 @@ def permutation_test(comparesess, mean_within_minus_between, nsubj, iu1, olderse
 
     if oldersession:
         plt.figure(figsize=(16,12))
-        bins=np.arange(0,49,1)-0.5
+        bins=np.arange(0,45,1)-0.5
         plt.hist(alltopshuffle, bins, rwidth=0.5, color='b')
-        plt.xticks(range(0,48,1))
-        plt.xlim([-1, 49])
+        plt.xticks(range(0,44,1))
+        plt.xlim([-1, 45])
         plt.yticks(range(0,10000,50))
         plt.ylim([0, 500])
         plt.title('Fisher 10k - Rank Older', fontsize=20)
@@ -164,10 +172,10 @@ def permutation_test(comparesess, mean_within_minus_between, nsubj, iu1, olderse
         plt.show()
     else:
         plt.figure(figsize=(16,12))
-        bins=np.arange(0,49,1)-0.5
+        bins=np.arange(0,45,1)-0.5
         plt.hist(alltopshuffle, bins, rwidth=0.5, color='b')
-        plt.xticks(range(0,48,1))
-        plt.xlim([-1, 49])
+        plt.xticks(range(0,44,1))
+        plt.xlim([-1, 45])
         plt.yticks(range(0,10000,50))
         plt.ylim([0, 500])
         plt.title('Fisher 10k - Rank Younger', fontsize=20)

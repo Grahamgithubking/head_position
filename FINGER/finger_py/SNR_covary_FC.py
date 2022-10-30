@@ -76,17 +76,17 @@ if __name__ == '__main__':
 
     ### Choose either of these:
     # allfc416 = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/fc_416.npy')
-    allfc96 = np.load ('/dhcp/fmri_anna_graham/GKgit/finger_npy/fc_96.npy')
+    allfc88 = np.load ('/dhcp/fmri_anna_graham/GKgit/finger_npy/88fc.npy')
 
 
     ### Choose which of these:
     # allsnr = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/416_snr_416_erode1.npy')
     # allsnr = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/416_snr_true.npy')
-    allsnrindividual = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/96_snr_true.npy')
-    allsnrgroup = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/96_snr_416_erode1.npy')
+    allsnrindividual = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/88_snr_true.npy')
+    allsnrgroup = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/88_snr_416_erode1.npy')
 
 
-    allfc_reshaped, nsubj, nsess, nroi = loadfc(allfc96)
+    allfc_reshaped, nsubj, nsess, nroi = loadfc(allfc88)
 
     allsnr_reshaped_indiv = loadsnr(allsnrindividual,snrproduct,nsubj,nsess,nroi)
     allsnr_reshaped_group = loadsnr(allsnrgroup,snrproduct,nsubj,nsess,nroi)
@@ -121,8 +121,8 @@ if __name__ == '__main__':
     # 372	17Networks_RH_DefaultA_PFCm_5	249	255	5	0
     # 373	17Networks_RH_DefaultA_PFCm_6	249	255	6	0
 
-    pairzerobased = [173,174] # LH Side, fc 0.5749
-    # pairzerobased = [371,372] # RH Side, fc 0.5642
+    pairzerobased = [173,174] # LH Side, fc 0.5946
+    # pairzerobased = [371,372] # RH Side, fc 0.5847
 
 
     ### Calculating across all sessions:
@@ -146,11 +146,11 @@ if __name__ == '__main__':
     plt.scatter(x=(fc_iu1), y=(snr_iu1_indiv), c='red')
     # plt.title('?? sessions \n TBC')
     plt.ylabel('SNR-individual')
-    plt.xlabel('FC')
-    plt.legend(['r=0.248, p<0.015'], loc='lower right', fontsize=13)
+    plt.xlabel('Fc')
+    plt.legend(['r=0.167, p<0.12'], loc='lower right', fontsize=13)
     plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fingerfigures_misc/SNRcovaryFC_snrindiv.jpg')
 
-    pc1 = pg.corr(np.ravel(fc_iu1), np.ravel(snr_iu1_indiv), tail='two-sided', method='pearson')
+    pc1 = pg.corr(np.ravel(fc_iu1), np.ravel(snr_iu1_indiv), alternative='two-sided', method='pearson')
     print('The pearson correlation coefficient for FC and SNR-individual is:')
     print(pc1)
     print()
@@ -159,11 +159,11 @@ if __name__ == '__main__':
     plt.scatter(x=(fc_iu1), y=(snr_iu1_group), c='blue')
     # plt.title('?? sessions \n TBC')
     plt.ylabel('SNR-group')
-    plt.xlabel('FC')
-    plt.legend(['r=0.253, p<0.013'], loc='lower right', fontsize=13)
+    plt.xlabel('Fc')
+    plt.legend(['r=0.3, p<0.005'], loc='lower right', fontsize=13)
     plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fingerfigures_misc/SNRcovaryFC_snrgroup.jpg')
 
-    pc2 = pg.corr(np.ravel(fc_iu1), np.ravel(snr_iu1_group), tail='two-sided', method='pearson')
+    pc2 = pg.corr(np.ravel(fc_iu1), np.ravel(snr_iu1_group), alternative='two-sided', method='pearson')
     print('The pearson correlation coefficient for FC and SNR-group is:')
     print(pc2)
     print()
@@ -174,6 +174,6 @@ if __name__ == '__main__':
     sns.kdeplot(x=np.ravel(fc_iu1), y=np.ravel(snr_iu1_group), color='blue')
     # plt.title('?? sessions \n TBC')
     plt.ylabel('SNR')
-    plt.xlabel('FC')
+    plt.xlabel('Fc')
     plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fingerfigures_misc/SNR_covary_FC_kde.jpg')
 

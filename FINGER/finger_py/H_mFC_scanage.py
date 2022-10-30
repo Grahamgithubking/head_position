@@ -14,7 +14,7 @@ from scipy import stats
 import pingouin as pg
 
 ## loading allfc:
-allfc = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/fc_96.npy')
+allfc = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/88fc.npy')
 sz=allfc.shape
 print('starting allfc shape is:')
 print(sz)
@@ -43,11 +43,11 @@ print(term_mean.shape)
 acrossmean=sessmean.mean(axis=1)
 print('The shape of acrossmean is:')
 print(acrossmean.shape)
-np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48_mFC.npy', acrossmean)
+np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/44_mFC.npy', acrossmean)
 delta_mean=term_mean - preterm_mean
 print('The shape of delta_mean is:')
 print(delta_mean.shape)
-np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48_deltaFC.npy', delta_mean)
+np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/44_deltaFC.npy', delta_mean)
 
 
 
@@ -66,8 +66,8 @@ plt.scatter(x=(scan2list), y=(term_mean), c='blue')
 # plt.xticks(range(0,16,2))
 # plt.xlim([0, 16])
 plt.title('b)', fontsize=15, fontweight="bold")
-plt.xlabel('PMA at session', fontsize=13)
-plt.ylabel('Mean fc at session', fontsize=13)
+plt.xlabel('Age (PMA) at session', fontsize=13)
+plt.ylabel('Fc (mean) at session', fontsize=13)
 plt.legend(('Session 1', 'Session 2'), labelcolor=('red', 'blue'))
 plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fc_figures/mFC_vs_scanage.jpg')
 

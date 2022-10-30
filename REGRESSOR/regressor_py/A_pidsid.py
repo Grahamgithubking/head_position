@@ -40,9 +40,14 @@ def make_PID_SID_arrays(one_sessid, two_sessid):
                 for sid in df_sess['session_id']:
                     allsessid[pid].append(sid)
 
-    # print(allpid)
-    # print(allsessid)
-    # print()
+    del_pid=['CC00191XX11', 'CC00518XX15', 'CC00672AN13', 'CC00770XX12']
+    for pid in del_pid:
+        allpid.remove(pid)
+        del allsessid[pid]
+    print(f"This is the updated allpid: \n {allpid}")
+    print(f"This is the updated allsessid: \n {allsessid}")
+    print()
+
     print('The length of allpid is:')
     print(len(allpid))
     maxnsess=np.max([len(x)for x in allsessid.values()])
@@ -60,8 +65,8 @@ def make_PID_SID_arrays(one_sessid, two_sessid):
         np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/416allpid.npy', allpid)
         np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/416allsessid.npy', allsessid)
     if two_sessid:
-        np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48allpid.npy', allpid)
-        np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/96allsessid.npy', allsessid)
+        np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/44allpid.npy', allpid)
+        np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/88allsessid.npy', allsessid)
 
 
     print('The allpid list was saved as an array')
@@ -74,8 +79,8 @@ def load_arrays(one_sessid, two_sessid):
         allpid = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/416allpid.npy')
         allsessid = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/416allsessid.npy', allow_pickle=True)
     if two_sessid:
-        allpid = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48allpid.npy')
-        allsessid = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/96allsessid.npy', allow_pickle=True)
+        allpid = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/44allpid.npy')
+        allsessid = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/88allsessid.npy', allow_pickle=True)
     print('The two npy array files were loaded')
     print()
 

@@ -25,7 +25,7 @@ def loadfc(one_sessid, two_sessid):
         nsess=sz[1]
         nroi=sz[2]
     if two_sessid:
-        allfc=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/fc_96.npy')
+        allfc=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/88fc.npy')
         sz=allfc.shape
         print('two_sessid allfc shape is:')
         print(sz)
@@ -59,9 +59,9 @@ def loadsnr(one_sessid, two_sessid, snrcoil, snrtrue, nsubj, nsess, nroi, nedges
         snr_all=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/416_snr_416_erode1.npy')
     if two_sessid:
         if snrcoil:
-            snr_all=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/96_snr_416_erode1.npy')
+            snr_all=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/88_snr_416_erode1.npy')
         if snrtrue:
-            snr_all=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/96_snr_true.npy')
+            snr_all=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/88_snr_true.npy')
         
     print('The shape of snr_all is:')
     print(snr_all.shape)
@@ -128,7 +128,7 @@ def regressors(one_sessid, two_sessid, allfc_iu1, allsnr_iu1, nedges, nsubj, snr
 
         
         
-    if two_sessid: # allsnr_iu1 has size [96,74691]  # allfc_iu1 has size [96,74691]
+    if two_sessid: # allsnr_iu1 has size [88,74691]  # allfc_iu1 has size [88,74691]
         
         if sess1:
             snr=allsnr_iu1[0::2,:]
@@ -277,19 +277,19 @@ def regressors(one_sessid, two_sessid, allfc_iu1, allsnr_iu1, nedges, nsubj, snr
     
 if __name__ == '__main__':
 
-    one_sessid=True
-    two_sessid=False
+    one_sessid=False
+    two_sessid=True
 
     subjectlevel=False  #subjectlevel is: regressors across edges
     edgelevel=True  #edgelevel is: regressors across subjects
 
     orthog=True # Turn this off if using snrfcy!
 
-    snrcoil=True  # aka SNR-Coil
-    snrtrue=False # Turn this off if using snrfcy!
+    snrcoil=False  # aka SNR-Coil
+    snrtrue=True # Turn this off if using snrfcy!
 
     sess1=False
-    sess2=False
+    sess2=True
 
     snrfcy1=False  # Here the SNR values (set to SNR-Coil) are from the same session as FCy
     snrfcy2=False  # Here the SNR values (set to SNR-Coil) are from the same session as FCy

@@ -21,7 +21,7 @@ do
     # fslstats /dhcp/dhcp_anat_pipeline/${SUBJ}/${SESS}/anat/${SUBJ}_${SESS}_desc-bet_space-T2w_brainmask.nii.gz -c | tee -a /dhcp/fmri_anna_graham/GKgit/head_position/HEADCOIL/head_position/48preterm.txt
 
     ### Using bold_brainmask:
-    fslstats /dhcp/dhcp_fmri_pipeline/${SUBJ}/${SESS}/func/${SUBJ}_${SESS}_task-rest_desc-preproc_space-bold_brainmask.nii.gz -c | tee -a /dhcp/fmri_anna_graham/GKgit/head_position/HEADCOIL/head_position/48term.txt
+    fslstats /dhcp/dhcp_fmri_pipeline/${SUBJ}/${SESS}/func/${SUBJ}_${SESS}_task-rest_desc-preproc_space-bold_brainmask.nii.gz -c | tee -a /dhcp/fmri_anna_graham/GKgit/head_position/HEADCOIL/head_position/44preterm.txt
 
 
-done < "48term.csv" #edit input file here
+done < "44preterm.csv" #edit input file here

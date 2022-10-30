@@ -15,8 +15,8 @@ import pingouin as pg
 import seaborn as sns
 
 
-data_preterm = pd.read_csv('/dhcp/fmri_anna_graham/GKgit/head_position/HEADCOIL/head_position/48preterm.txt', sep=' ', index_col=False, header=None, names=["x", "y", "z"])
-data_term = pd.read_csv('/dhcp/fmri_anna_graham/GKgit/head_position/HEADCOIL/head_position/48term.txt', sep=' ', index_col=False, header=None, names=["x", "y", "z"])
+data_preterm = pd.read_csv('/dhcp/fmri_anna_graham/GKgit/head_position/HEADCOIL/head_position/44preterm.txt', sep=' ', index_col=False, header=None, names=["x", "y", "z"])
+data_term = pd.read_csv('/dhcp/fmri_anna_graham/GKgit/head_position/HEADCOIL/head_position/44term.txt', sep=' ', index_col=False, header=None, names=["x", "y", "z"])
 
 print('Here is the data_preterm for xyz coordinates:')
 print(data_preterm)
@@ -42,10 +42,10 @@ print()
 print(f"Here is the list of yterm: {yterm}")
 print()
 print()
-print(f"The min of y is: {min(yprem)}")
-print(f"The max of y is: {max(yprem)}")
-print(f"The min of x is: {min(xprem)}")
-print(f"The max of x is: {max(xprem)}")
+print(f"The min of y term is: {min(yterm)}")
+print(f"The max of y prem is: {max(yprem)}")
+print(f"The min of x prem is: {min(xprem)}")
+print(f"The max of x prem is: {max(xprem)}")
 print()
 
 plt.figure(1)
@@ -53,20 +53,20 @@ plt.figure(1)
 # sns.kdeplot(x=(xterm), y=(yterm), color='blue')
 plt.scatter(x=(xprem), y=(yprem), c='red')
 plt.scatter(x=(xterm), y=(yterm), c='blue')
-plt.xticks(range(int(min(yprem)),int(max(yprem))+1,4))
-plt.yticks(range(int(min(yprem)),int(max(yprem))+1,4))
+plt.xticks(range(int(min(xprem)),int(max(yprem))+1,4))
+plt.yticks(range(int(min(xprem)),int(max(yprem))+1,4))
 plt.xlim([-15,30])
 plt.ylim([-15,30])
 # plt.title('Centroids of brainmasks', fontsize=15, fontweight="bold")
-plt.xlabel('right - left (mm)', fontsize=13)
-plt.ylabel('anterior - posterior (mm)', fontsize=13)
+plt.xlabel('left   -   right (mm)', fontsize=13)
+plt.ylabel('posterior   -   anterior (mm)', fontsize=13)
 plt.legend(('Preterm', 'Term'), loc='upper right', fontsize=10, labelcolor=('red', 'blue'))
 
 ### Save out:
 plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fingerfigures_misc/centroidplot.jpg')
 
-### If want to see the 3 participants who fingerprinted successfully:
-# plt.scatter(x=(top_xprem), y=(top_yprem), c='yellow', marker="D") # To identfy 3 participants who fingerprinted
-# plt.scatter(x=(top_xterm), y=(top_yterm), c='green', marker="D") # To identfy 3 participants who fingerprinted
-# plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fingerfigures_misc/centroidplot_tops.jpg')
+## If want to see the 3 participants who fingerprinted successfully:
+plt.scatter(x=(top_xprem), y=(top_yprem), c='yellow', marker="D") # To identfy 3 participants who fingerprinted
+plt.scatter(x=(top_xterm), y=(top_yterm), c='green', marker="D") # To identfy 3 participants who fingerprinted
+plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fingerfigures_misc/centroidplot_tops.jpg')
 

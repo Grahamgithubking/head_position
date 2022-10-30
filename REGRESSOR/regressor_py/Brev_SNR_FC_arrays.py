@@ -9,7 +9,7 @@ import os
 import nilearn.signal
 import matplotlib.pyplot as plt
 from scipy import stats
-import pingouin as pg
+# import pingouin as pg
 
 
 def load_arrays(one_sessid, two_sessid):
@@ -18,8 +18,8 @@ def load_arrays(one_sessid, two_sessid):
         allpid = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/416allpid.npy')
         allsessid = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/416allsessid.npy', allow_pickle=True) #I had to allow_pickle=True so as to be able to load allsessid
     if two_sessid:
-        allpid = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48allpid.npy')
-        allsessid = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/96allsessid.npy', allow_pickle=True) #I had to allow_pickle=True so as to be able to load allsessid
+        allpid = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/44allpid.npy')
+        allsessid = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/88allsessid.npy', allow_pickle=True) #I had to allow_pickle=True so as to be able to load allsessid
 
     print('This is allpid:')
     print(allpid)
@@ -76,11 +76,11 @@ def loading_SNRHP(run_snr, snr_path, snrcoil416, snrcoil96, snrtrue, one_sessid,
                 np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/416_snr_true.npy', snr_all) #Change name here!!!
         if two_sessid:
             if snrcoil416:
-                np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/96_snr_416_erode1.npy', snr_all) #Change name here!!!
+                np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/88_snr_416_erode1.npy', snr_all) #Change name here!!!
             if snrcoil96:
-                np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/96_snr_96_erode1.npy', snr_all) #Change name here!!!
+                np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/88_snr_96_erode1.npy', snr_all) #Change name here!!!
             if snrtrue:
-                np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/96_snr_true.npy', snr_all) #Change name here!!!
+                np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/88_snr_true.npy', snr_all) #Change name here!!!
 
         
 
@@ -139,11 +139,11 @@ if __name__ == '__main__':
     run_snr = True ### A switch for calculating SNRHP array
     run_fc = False ### A switch for calculating FC array
 
-    one_sessid=True
-    two_sessid=False
+    one_sessid=False
+    two_sessid=True
 
     snrcoil416=False
-    snrcoil96=False
+    snrcoil96=False # This needs to be updated to snrcoil88 in future!!!!!!
     snrtrue=True
 
 

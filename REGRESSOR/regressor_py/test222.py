@@ -6,9 +6,9 @@ import os
 import nilearn.signal
 import matplotlib.pyplot as plt
 from scipy import stats
-import pingouin as pg
+# import pingouin as pg
 import seaborn as sns
-from scipy.stats import bootstrap
+# from scipy.stats import bootstrap
 
 #####################################
 # arrg=np.array([[[[1],[2]],[[3],[4]]],[[[9],[10]],[[11],[12]]],[[[5],[6]],[[7],[8]]]])
@@ -260,21 +260,29 @@ from scipy.stats import bootstrap
 #############################################################
 
 
-a=np.array(((1,3,6),(3,7,1)))
-b=np.array(((11,8,45),(2,19,10)))
+# a=np.array(((1,3,6),(3,7,1)))
+# b=np.array(((11,8,45),(2,19,10)))
 
-print(a)
-print(a.shape)
-print(type(a))
+# print(a)
+# print(a.shape)
+# print(type(a))
 
+# correl=np.corrcoef(a, b)
+# print('This is correl:')
+# print(correl)
+# print(correl.shape)
 
+########################################
 
+allsessid = {'pid101': ['ses111', 'ses222'], 'pid202': ['ses333', 'ses444'], 'pid303': ['ses555', 'ses666']}
 
-correl=np.corrcoef(a, b)
-print('This is correl:')
-print(correl)
-print(correl.shape)
+print(allsessid)
 
+del_pid=['pid202']
 
+for pid in del_pid:
+    del allsessid[pid]
 
+print('This is deleted allsessid:')
+print(allsessid)
 

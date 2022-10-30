@@ -2,9 +2,9 @@
 # #Date: 08/2022
 
 # Inputting of <Predicted/True> SNR values into numpy arrays for two splits per session,
-# for all sessions of the 48 particpants with both preterm and term sessions
+# for all sessions of the 44 particpants with both preterm and term sessions
 # 
-# allsnr is a 48x2x2x387 npy matrix
+# allsnr is a 44x2x2x387 npy matrix
 
 # TBC.............
 
@@ -39,16 +39,24 @@ def get_two_session_subjects():
             for sid in df_sess['session_id']:
                 allsessid[pid].append(sid)
 
+    del_pid=['CC00191XX11', 'CC00518XX15', 'CC00672AN13', 'CC00770XX12']
+    for pid in del_pid:
+        allpid.remove(pid)
+        del allsessid[pid]
+    print(f"This is the updated allpid: \n {allpid}")
+    print(f"This is the updated allsessid: \n {allsessid}")
+    print()
+
     return allpid, allsessid
 
 
 def load_snr(hp_path, allsessid, snrtrue):
-    # Loading SNRCoil or SNRTrue values for TWO splits in each of 96 sessions
+    # Loading SNRCoil or SNRTrue values for TWO splits in each of 88 sessions
 
     nrois=387
     nhps=2 # number of head positions/splits
     nsess=2
-    nsubj=48
+    nsubj=44
     allsnr=np.zeros((nsubj, nsess, nhps, nrois))
     print('the shape of allsnr zeros array is:')
     print(allsnr.shape)
@@ -83,25 +91,25 @@ def load_snr(hp_path, allsessid, snrtrue):
                 print(snr_trimmed.shape)
                 print()  
 
-                #Matrix for all 192 head position SNR values:
+                #Matrix for all 176 head position SNR values:
                 allsnr[pidind, sidind, hpind, :]=snr_trimmed
 
-    print('The shape of the 192_split_snr array is:')
+    print('The shape of the 176_split_snr array is:')
     print(allsnr.shape)
     print()
 
     # Saving output:
     if snrtrue:
-        np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/192_snrtrue.npy', allsnr)
+        np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/176_snrtrue.npy', allsnr)
     else:
-        np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/192hp_snr.npy', allsnr)
+        np.save('/dhcp/fmri_anna_graham/GKgit/snr_npy/176hp_snr.npy', allsnr)
     
     
 
 if __name__ == '__main__':
     
     ## Switch to select snrcoil (false) versus snrtrue (true):
-    snrtrue=False
+    snrtrue=True
     
     allpid, allsessid= get_two_session_subjects()
 

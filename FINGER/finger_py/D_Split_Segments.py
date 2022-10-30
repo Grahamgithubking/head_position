@@ -1,5 +1,5 @@
 #### All original code is copyright of Graham King, Trinity College Institute of Neuroscience.
-## Code to create Split Segments of each of 96 session for 48 Participants
+## Code to create Split Segments of each of 88 session for 44 Participants
 
 import pandas as pd
 import numpy as np
@@ -34,8 +34,15 @@ def get_two_session_subjects():
                 allsessid[pid].append(sid)
                 
 
-    return allpid, allsessid
- 
+    del_pid=['CC00191XX11', 'CC00518XX15', 'CC00672AN13', 'CC00770XX12']
+    for pid in del_pid:
+        allpid.remove(pid)
+        del allsessid[pid]
+    print(f"This is the updated allpid: \n {allpid}")
+    print(f"This is the updated allsessid: \n {allsessid}")
+    print()
+
+    return allpid, allsessid 
 
 def split_timecourses(timecourse_pth, split_pth, allsessid):
     # Aiming to split each session into half!

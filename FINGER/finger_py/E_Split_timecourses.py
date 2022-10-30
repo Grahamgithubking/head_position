@@ -33,15 +33,23 @@ def get_two_session_subjects():
             for sid in df_sess['session_id']:
                 allsessid[pid].append(sid)
 
+    del_pid=['CC00191XX11', 'CC00518XX15', 'CC00672AN13', 'CC00770XX12']
+    for pid in del_pid:
+        allpid.remove(pid)
+        del allsessid[pid]
+    print(f"This is the updated allpid: \n {allpid}")
+    print(f"This is the updated allsessid: \n {allsessid}")
+    print()
+
     return allpid, allsessid
 
 
 def pearsoncorr(split_pth, allsessid, imageroot):
-    # Loading 192 split segments timecourse numpy files
+    # Loading 176 split segments timecourse numpy files
     nrois=387
     nsplit=2
     nsess=2
-    npart=48
+    npart=44
     allfc=np.zeros((npart, nsess, nsplit, nrois, nrois))
     print('the shape of original allfc array is:')
     print(allfc.shape)
@@ -71,31 +79,31 @@ def pearsoncorr(split_pth, allsessid, imageroot):
                 print(timecourse_trimmed.shape)
 
                 # Run filtering using nilearn:
-                timecourse_filtered = nilearn.signal.clean(timecourse_trimmed, sessions=None, detrend=True, standardize='psc', confounds=None, low_pass=0.1, high_pass=0.01, t_r=0.392, ensure_finite=False)
+                timecourse_filtered = nilearn.signal.clean(timecourse_trimmed, runs=None, detrend=True, standardize='psc', confounds=None, low_pass=0.1, high_pass=0.01, t_r=0.392, ensure_finite=False)
                 print('timecourse was filtered')
 
                 # Calculate Pearson first order correlation across split segment:
                 fc = np.corrcoef(timecourse_filtered.T)
                 print('The filtered split segment timecourse functional connectivity was correlated')
            
-                # Plotting RSM matrices 387x387 edges for each split segment:
-                print('here is the RSM of each split:')
-                plt.imshow(fc)
-                plt.colorbar()
-                print('saving the png image of first level correlation:')
-                imagename= str(pid) + str(sid) + str(split)
-                plt.savefig(imageroot + "%s.png" %imagename)
-                plt.show()
+                # ## Plotting RSM matrices 387x387 edges for each split segment:
+                # print('here is the RSM of each split:')
+                # plt.imshow(fc)
+                # plt.colorbar()
+                # print('saving the png image of first level correlation:')
+                # imagename= str(pid) + str(sid) + str(split)
+                # plt.savefig(imageroot + "%s.png" %imagename)
+                # plt.show()
 
                 # Matrix for all 192 first level correlations:
                 allfc[pidind, sidind, splitind, :,:]=fc
 
-    print('The shape of the 192 first level correlations array is:')
+    print('The shape of the 176 first level correlations array is:')
     print(allfc.shape)
     print()
 
     # Saving output:
-    np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/192fc.npy', allfc)
+    np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/176fc.npy', allfc)
 
 
 
@@ -105,7 +113,7 @@ if __name__ == '__main__':
     print(allsessid)
 
     split_pth = '/dhcp/fmri_anna_graham/timecourses_split/'
-    imageroot = '/dhcp/fmri_anna_graham/gk_fc_192/'
+    imageroot = '/dhcp/fmri_anna_graham/gk_fc_176/'
     
     pearsoncorr(split_pth, allsessid, imageroot)
 

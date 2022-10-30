@@ -3,7 +3,9 @@
 ### Code to calculate fingerprint identification success
 ### Code to calculate mean within vs between subject correlation
 ### Fishers exact permutation test to determine significance
-### Last edited by GK on June 14 2021
+
+### Updated to 44 participants from 48
+### Last edited by GK in Oct 2022
 
 import pandas as pd
 import numpy as np
@@ -33,14 +35,20 @@ def get_two_session_subjects():
             allsessid[pid]=[]
             for sid in df_sess['session_id']:
                 allsessid[pid].append(sid)
-    print(allpid)
+    print(f"This is the original allpid: \n {allpid}")
     print()
-    return allpid, allsessid
+    del_pid=['CC00191XX11', 'CC00518XX15', 'CC00672AN13', 'CC00770XX12']
+    for pid in del_pid:
+        allpid.remove(pid)
+    print(f"This is the updated allpid: \n {allpid}")
+    print()
+
+    return allpid
 
 def session2session(allpid):
     
     # loading allfc
-    allfc = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/fc_96.npy')
+    allfc = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/88fc.npy')
     sz=allfc.shape
     print('starting allfc shape is:')
     print(sz)
@@ -63,9 +71,9 @@ def session2session(allpid):
     # print(allfc_iu1.shape)
     # allfc_reshaped = allfc_iu1
 
-    ## Spearman second order correlation across 96 sessions:
+    ## Spearman second order correlation across 88 sessions:
     sessim, pval=stats.spearmanr(allfc_reshaped.T)
-    print('the shape of the sessim matrix is:')  # this is a 96x96 matrix
+    print('The shape of the sessim matrix is:')  # this is a 88x88 matrix
     print(sessim.shape)
     print()
 
@@ -76,9 +84,9 @@ def session2session(allpid):
     comparesess=sessim[0::2,1::2]
     print('The shape of comparesess is:')
     print(comparesess.shape)
-    print('Sliced at [42:,42:] gives:')
+    print('Sliced at [40:,40:] gives:')
     print()
-    print(comparesess[42:,42:])
+    print(comparesess[40:,40:])
     print()
 
 
@@ -88,7 +96,7 @@ def session2session(allpid):
     print('The shape of the within array is:')
     print(within.shape)
     print()
-    np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48withinfc.npy', within)
+    np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/44withinfc.npy', within)
 
     ## Saving the across particpant array:
     btwfc_all=[]
@@ -102,7 +110,7 @@ def session2session(allpid):
     print('The shape of the btwfc_all array is:')
     print(btwfc_array.shape)
     print()
-    np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/btwfc.npy', btwfc_array)
+    np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/44btwfc.npy', btwfc_array)
     
     ## Saving the unique fingerprint fp_i (within_fc minus between_fc, for each i th subject):
     fp_all=[]
@@ -114,10 +122,10 @@ def session2session(allpid):
         fp_all.append(fp_i)
     fp_array=np.array(fp_all)
     print(fp_all)
-    print('the shape of the fp_all array is:')
+    print('The shape of the fp_all array is:')
     print(fp_array.shape)
     print()
-    np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48fp.npy', fp_array)
+    np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/44fp.npy', fp_array)
     
     
 
@@ -125,8 +133,8 @@ def session2session(allpid):
     c = plt.imshow(comparesess, cmap='Greens') #Edit color
     plt.colorbar(c)
     plt.title('a)', fontsize=20, fontweight="bold")
-    plt.xlabel('Participants 1 - 48', fontsize=18)
-    plt.ylabel('Participants 1 - 48', fontsize=18)
+    plt.xlabel('Participants 1 - 44', fontsize=18)
+    plt.ylabel('Participants 1 - 44', fontsize=18)
     plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fc_figures/RSM_acrosssess.jpg')
 
     #Sort columns according to how well each subject of the session0 matches each of the session1
@@ -151,21 +159,18 @@ def session2session(allpid):
     #     print('%s\t%d'%(subj, rankofmatch[ind]))
     # print()
 
-
-
-
-    bins=np.arange(0,49,1)-0.5
-    plt.style.use('ggplot')
-    plt.figure(figsize=(16,12))
-    plt.hist(rankofmatch, bins, rwidth=0.5, color='g')
-    plt.xticks(range(0,48,1))
-    plt.xlim([-1, 49])
-    plt.yticks(range(0,10,1))
-    plt.title('Rank of the within-subject correlation across sessions', fontsize=20, pad=5, loc='center')
-    plt.xlabel('Rank (lowest = 0 to highest = 47)', fontsize=15)
-    plt.ylabel('No. Subjects', fontsize=15)
-    plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/acrosssess_figures/ID_sessions.png')
-    plt.show()
+    # bins=np.arange(0,49,1)-0.5
+    # plt.style.use('ggplot')
+    # plt.figure(figsize=(16,12))
+    # plt.hist(rankofmatch, bins, rwidth=0.5, color='g')
+    # plt.xticks(range(0,48,1))
+    # plt.xlim([-1, 49])
+    # plt.yticks(range(0,10,1))
+    # plt.title('Rank of the within-subject correlation across sessions', fontsize=20, pad=5, loc='center')
+    # plt.xlabel('Rank (lowest = 0 to highest = 47)', fontsize=15)
+    # plt.ylabel('No. Subjects', fontsize=15)
+    # plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/acrosssess_figures/ID_sessions.png')
+    # plt.show()
 
     ## Calculating the difference in correlation meanwithin vs meanbetween:
     iu1 = np.triu_indices(nsubj, k=1)
@@ -212,30 +217,30 @@ def permutation_test(comparesess, mean_within_minus_between, nsubj, iu1):
         between = shufflerows[iu1]    #edited from comparesess
         shuffle_mean_within_minus_between.append(np.mean(within) - np.mean(between))
 
-    plt.figure(figsize=(16,12))
-    bins=np.arange(0,49,1)-0.5
-    plt.hist(alltopshuffle, bins, rwidth=0.5, color='b')
-    plt.xticks(range(0,48,1))
-    plt.xlim([-1, 49])
-    plt.yticks(range(0,10000,50))
-    plt.ylim([0, 500])
-    plt.title('Fisher 10k - Rank', fontsize=20)
-    plt.xlabel('No. of Top ranks', fontsize=15)
-    plt.ylabel('No. Permutations', fontsize=15)
-    plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/acrosssess_figures/Rank_Fisher.png') #edit name here
-    plt.show()
+    # plt.figure(figsize=(16,12))
+    # bins=np.arange(0,49,1)-0.5
+    # plt.hist(alltopshuffle, bins, rwidth=0.5, color='b')
+    # plt.xticks(range(0,48,1))
+    # plt.xlim([-1, 49])
+    # plt.yticks(range(0,10000,50))
+    # plt.ylim([0, 500])
+    # plt.title('Fisher 10k - Rank', fontsize=20)
+    # plt.xlabel('No. of Top ranks', fontsize=15)
+    # plt.ylabel('No. Permutations', fontsize=15)
+    # plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/acrosssess_figures/Rank_Fisher.png') #edit name here
+    # plt.show()
 
 
-    plt.figure(figsize=(16,12))
-    bins=np.arange(0,0.1,0.005)
-    plt.hist(shuffle_mean_within_minus_between, bins, rwidth=0.5, color='b')
-    plt.yticks(range(0,10000,50))
-    plt.ylim([0, 3000])
-    plt.title('Fisher 10k - DeltaR', fontsize=20)
-    plt.xlabel('Delta r values', fontsize=15)
-    plt.ylabel('No. Permutations', fontsize=15)
-    plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/acrosssess_figures/DeltaR_Fisher.png') #edit name here
-    plt.show()
+    # plt.figure(figsize=(16,12))
+    # bins=np.arange(0,0.1,0.005)
+    # plt.hist(shuffle_mean_within_minus_between, bins, rwidth=0.5, color='b')
+    # plt.yticks(range(0,10000,50))
+    # plt.ylim([0, 3000])
+    # plt.title('Fisher 10k - DeltaR', fontsize=20)
+    # plt.xlabel('Delta r values', fontsize=15)
+    # plt.ylabel('No. Permutations', fontsize=15)
+    # plt.savefig('/dhcp/fmri_anna_graham/GKgit/fingerprinting/FINGER/finger_figures/acrosssess_figures/DeltaR_Fisher.png') #edit name here
+    # plt.show()
 
     within_between_perm = np.mean(shuffle_mean_within_minus_between>=mean_within_minus_between) ##No. of trues divided by 10k
     print(f'Shuffled - Mean within subject minus Mean between subject, p<{within_between_perm}')
@@ -244,10 +249,8 @@ def permutation_test(comparesess, mean_within_minus_between, nsubj, iu1):
 if __name__ == '__main__':
 
     timecourse_pth = '/dhcp/fmri_anna_graham/timecourses/'
-    allpid, allsessid = get_two_session_subjects()
+    allpid = get_two_session_subjects()
     comparesess, mean_within_minus_between, nsubj, iu1 = session2session(allpid)
-    permutation_test(comparesess, mean_within_minus_between,nsubj, iu1)
-
-
+    permutation_test(comparesess, mean_within_minus_between, nsubj, iu1)
 
 

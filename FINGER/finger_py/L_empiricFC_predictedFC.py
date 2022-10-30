@@ -5,7 +5,7 @@ import os
 import nilearn.signal
 import matplotlib.pyplot as plt
 from scipy import stats
-import pingouin as pg
+# import pingouin as pg
 import statsmodels.api as sm
 import seaborn as sns
 
@@ -82,6 +82,11 @@ def correlation(predicted, allfc_iu1):
     print(correl.shape)
     print()
 
+    plt.figure(1)
+    c=plt.imshow(correl)
+    plt.colorbar(c)
+    plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fingerfigures_misc/correl.jpg')
+
     compare=correl[0:96:1,96::1] # The upper right quadrant of the 192x192 matrix
     diagonal=np.diag(compare) # The diagonal = This is the correlation values between empirical vs predicted FC for each of 96 sessions.
     print(f"The shape of diagonal is: {diagonal.shape}")
@@ -93,7 +98,7 @@ def correlation(predicted, allfc_iu1):
     print(np.mean(diagonal))
     print()
 
-    plt.figure(1)
+    plt.figure(2)
     sns.distplot(diagonal, kde=True) 
     plt.xlabel('Correlation (Pearson)')
     plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fingerfigures_misc/emp_v_pred.jpg') # Edit name here!

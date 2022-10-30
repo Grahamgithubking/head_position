@@ -32,8 +32,15 @@ def get_two_session_subjects():
             allsessid[pid]=[]
             for sid in df_sess['session_id']:
                 allsessid[pid].append(sid)
-    print(allpid)
+
+    del_pid=['CC00191XX11', 'CC00518XX15', 'CC00672AN13', 'CC00770XX12']
+    for pid in del_pid:
+        allpid.remove(pid)
+        del allsessid[pid]
+    print(f"This is the updated allpid: \n {allpid}")
+    print(f"This is the updated allsessid: \n {allsessid}")
     print()
+
     return allpid
 
 def loadsnr(imageroot, one_full, two_full, two_split, snrcoil, snrtrue, oldersession, allpid):
@@ -64,12 +71,12 @@ def loadsnr(imageroot, one_full, two_full, two_split, snrcoil, snrtrue, olderses
     if two_full:
         if snrcoil:
             x='snrcoil'
-            y='96'
-            snr_all=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/96_snr_416_erode1.npy') #This has shape [48,2,387]
+            y='88'
+            snr_all=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/88_snr_416_erode1.npy') #This has shape [44,2,387]
         if snrtrue:
             x='snrtrue'
-            y='96'
-            snr_all=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/96_snr_true.npy') #This has shape [48,2,387]
+            y='88'
+            snr_all=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/88_snr_true.npy') #This has shape [44,2,387]
 
         sz=snr_all.shape
         print('The shape of snr_all is:')
@@ -86,19 +93,19 @@ def loadsnr(imageroot, one_full, two_full, two_split, snrcoil, snrtrue, olderses
 
     if two_split:
         if snrcoil:
-            snr_all = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/192hp_snr.npy')
+            snr_all = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/176hp_snr.npy')
             x = 'snrcoil'
             if oldersession:
-                y='96split_older_'
+                y='88split_older_'
             else:
-                y='96split_younger_'
+                y='88split_younger_'
         if snrtrue:
-            snr_all = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/192_snrtrue.npy')
+            snr_all = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/176_snrtrue.npy')
             x = 'snrtrue'
             if oldersession:
-                y='96split_older_'
+                y='88split_older_'
             else:
-                y='96split_younger_'
+                y='88split_younger_'
                     
 
         sz=snr_all.shape
@@ -117,20 +124,24 @@ def loadsnr(imageroot, one_full, two_full, two_split, snrcoil, snrtrue, olderses
 
 
 
-    # I <did/did not> DO THIS:
-    ##### Multiplying the SNR across all edges for each ROI:
-    # snrbysnr=np.zeros((nsubj*nsess,nroi,nroi))
-    # for ind in range(nsubj*nsess):
-    #     snr=snr_all_reshaped[ind,:]
-    #     snrbysnr[ind,:,:]=np.outer(snr, snr) #instead of using snr*snr.T
-    # print('The shape of snrbysnr is:')
-    # print(snrbysnr.shape)
-    # print()
-    # iu1=np.triu_indices(nroi, k=1) #selecting the upper triangle of a matrix
-    # allsnr_iu1=np.array([x[iu1]for x in snrbysnr]) #for each session, selecting the upper triangle of the 387x387 matrix
-    # print('The shape of allsnr_iu1 is:')
-    # print(allsnr_iu1.shape)
-    # snr_all_reshaped=allsnr_iu1
+    #### I <did/did not> DO THIS:
+    #### Multiplying the SNR across all edges for each ROI:
+    if two_split:
+        hp_all=nsubj*nsess*nhp
+    else:
+        hp_all=nsubj*nsess
+    snrbysnr=np.zeros((hp_all,nroi,nroi))
+    for ind in range(hp_all):
+        snr=snr_all_reshaped[ind,:]
+        snrbysnr[ind,:,:]=np.outer(snr, snr) #instead of using snr*snr.T
+    print('The shape of snrbysnr is:')
+    print(snrbysnr.shape)
+    print()
+    iu1=np.triu_indices(nroi, k=1) #selecting the upper triangle of a matrix
+    allsnr_iu1=np.array([x[iu1]for x in snrbysnr]) #for each session, selecting the upper triangle of the 387x387 matrix
+    print('The shape of allsnr_iu1 is:')
+    print(allsnr_iu1.shape)
+    snr_all_reshaped=allsnr_iu1
 
 
     snrim, pval=stats.spearmanr(snr_all_reshaped.T)
@@ -142,17 +153,17 @@ def loadsnr(imageroot, one_full, two_full, two_split, snrcoil, snrtrue, olderses
         comparesess=snrim[0::2,1::2]
         print('The shape of comparesess is:')
         print(comparesess.shape)
-        print('Sliced at [42:,42:] gives:')
+        print('Sliced at [40:,40:] gives:')
         print()
-        print(comparesess[42:,42:])
+        print(comparesess[40:,40:])
         print()
 
         plt.figure(figsize=(12,8))
         c = plt.imshow(comparesess, cmap='Greens') #Edit color
         plt.colorbar(c)
         plt.title('a)', fontsize=20, fontweight="bold")
-        plt.xlabel('Participants 1 - 48', fontsize=18)
-        plt.ylabel('Participants 1 - 48', fontsize=18)
+        plt.xlabel('Participants 1 - 44', fontsize=18)
+        plt.ylabel('Participants 1 - 44', fontsize=18)
         
 
     if two_split:
@@ -170,15 +181,15 @@ def loadsnr(imageroot, one_full, two_full, two_split, snrcoil, snrtrue, olderses
             c = plt.imshow(comparesess, cmap='Reds') # Edit color here
             plt.colorbar(c)
             plt.title('c)', fontsize=20, fontweight="bold") # Edit title
-            plt.xlabel('Participants 1 - 48', fontsize=18)
-            plt.ylabel('Participants 1 - 48', fontsize=18)
+            plt.xlabel('Participants 1 - 44', fontsize=18)
+            plt.ylabel('Participants 1 - 44', fontsize=18)
         else:
             plt.figure(figsize=(12,8))
             c = plt.imshow(comparesess, cmap='Blues') # Edit color here
             plt.colorbar(c)
             plt.title('b)', fontsize=20, fontweight="bold") # Edit title
-            plt.xlabel('Participants 1 - 48', fontsize=18)
-            plt.ylabel('Participants 1 - 48', fontsize=18)
+            plt.xlabel('Participants 1 - 44', fontsize=18)
+            plt.ylabel('Participants 1 - 44', fontsize=18)
 
     plt.savefig(str(imageroot) + str(y) + str(x) + '.jpg')
 
@@ -210,12 +221,12 @@ if __name__ == '__main__':
     imageroot='/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/snr_figures/'
 
     ## SWITCHES:
-    snrcoil=False
-    snrtrue=True
+    snrcoil=True
+    snrtrue=False
     
     one_full=False
-    two_full=False
-    two_split=True
+    two_full=True
+    two_split=False
     oldersession=False
 
     allpid = get_two_session_subjects()
