@@ -19,7 +19,7 @@ subjectlevel=False
 
 orthog=True # Set this to False if doing snrfcy!
 
-snrtrue=False  # False = SNRCoil
+snrtrue=True  # False = SNRCoil
 
 split=True  #  Where SNR (Coil/True) is from a 'different' split session to FCy
 
@@ -30,7 +30,7 @@ bothsess=True
 preterm=False
 term=False
 
-bootstrapping=False
+bootstrapping=True
 
 filepath='/dhcp/fmri_anna_graham/GKgit/snr_npy/'
 
@@ -42,8 +42,8 @@ if edgelevel:
     y='298764'  # 74691 x 4directions
 if subjectlevel:
     level='subjectlevel'
-    x='48'
-    y='192'  #48 x 4directions
+    x='44'
+    y='176'  #44 x 4directions
 
 if snrtrue:
     if orthog:

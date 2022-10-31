@@ -13,23 +13,23 @@ import seaborn as sns
 
 
 
-withinfcprem=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48withinfc_splitspreterm.npy')
-withinfcterm=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48withinfc_splitsterm.npy')
+withinfcprem=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/44withinfc_splitspreterm.npy')
+withinfcterm=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/44withinfc_splitsterm.npy')
 withinfc=np.vstack((withinfcprem,withinfcterm))
 withinfc=withinfc.T
-print(f"This is withinfc shape: {withinfc.shape}") # This is a [48,2] array of CS for preterm and term sessions
+print(f"This is withinfc shape: {withinfc.shape}") # This is a [44,2] array of CS for preterm and term sessions
 print()
 
-snrcoil=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/192hp_snr.npy') # This is a [48,2,2,387] array
-snrcoil=np.mean(snrcoil, axis=(2,3)) # of 4d array, this should produce a [48,2] mean per session
+snrcoil=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/176hp_snr.npy') # This is a [44,2,2,387] array
+snrcoil=np.mean(snrcoil, axis=(2,3)) # of 4d array, this should produce a [44,2] mean per session
 
-mfwd=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48_fwd_splits.npy') # This is a [48x2x2] array, the 3rd dimension is the mean_fwd splits
+mfwd=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/176_mFWD.npy') # This is a [44x2x2] array, the 3rd dimension is the mean_fwd splits
 mfwd=np.mean(mfwd, axis=(2))
 
-### Comparing all 96 sesssions:
-withinfc=np.reshape(withinfc, (48*2))
-snrcoil=np.reshape(snrcoil, (48*2))
-mfwd=np.reshape(mfwd, (48*2))
+### Comparing all 88 sesssions:
+withinfc=np.reshape(withinfc, (44*2))
+snrcoil=np.reshape(snrcoil, (44*2))
+mfwd=np.reshape(mfwd, (44*2))
 
 ### Comparing only preterm/term sessions:
 # withinfc=withinfc[:,0]
@@ -114,6 +114,6 @@ plt.legend([f"Mean SNR-group (p<{str(round(pvalues[1],3))})", \
 # plt.title(f"Relationship to Connectome Stability: \n Standardized Regression Coeffiecients", fontsize=30)
 plt.xticks([])
 plt.yticks([])
-plt.text(-0.25, -0.2, 'Degrees of freedom = 93 \n r2 = 0.176', fontsize = 24) # DOF = 96 observations - 2 parameters -1 = 93
+plt.text(-0.25, -0.2, 'Degrees of freedom = 85 \n r2 = 0.173', fontsize = 24) # DOF = 88 observations - 2 parameters -1 = 85
 plt.savefig(f"/dhcp/fmri_anna_graham/GKgit/head_position/REGRESSOR/regressor_figures/SRC_ALL_split.jpg")
 

@@ -11,21 +11,21 @@ import matplotlib.pyplot as plt
 from scipy import stats
 from scipy.stats import bootstrap
 import pingouin as pg
-# import statsmodels.api as sm
+import statsmodels.api as sm
 import seaborn as sns
 
 # SWITCHES:
 edgelevel=True
 subjectlevel=False
 
-snrcoil=True
-snrtrue=False
+snrcoil=False
+snrtrue=True
 
 orthog=True # Set this to False if doing snrfcy!
 
 snrfcy=False  # Only used when both orthog<false> and SNRCoil<True>
 
-bootstrapping=False
+bootstrapping=True
 
 filepath='/dhcp/fmri_anna_graham/GKgit/snr_npy/'
 

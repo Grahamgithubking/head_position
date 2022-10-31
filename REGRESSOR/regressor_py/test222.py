@@ -6,9 +6,9 @@ import os
 import nilearn.signal
 import matplotlib.pyplot as plt
 from scipy import stats
-# import pingouin as pg
+import pingouin as pg
 import seaborn as sns
-# from scipy.stats import bootstrap
+from scipy.stats import bootstrap
 
 #####################################
 # arrg=np.array([[[[1],[2]],[[3],[4]]],[[[9],[10]],[[11],[12]]],[[[5],[6]],[[7],[8]]]])
@@ -120,12 +120,12 @@ import seaborn as sns
 #################################
 
 
-# mofc=np.genfromtxt('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_data/48_mOFC.csv', delimiter=',')
+# mofc=np.genfromtxt('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_data/44_mOFC.csv', delimiter=',')
 # mofc=mofc[:,1:]
 # mofc=np.ravel(mofc)
 # print(mofc)
 # print(mofc.shape)
-# np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48_mofc.npy', mofc)
+# np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/44_mofc.npy', mofc)
 
 #####################################
 
@@ -175,13 +175,13 @@ import seaborn as sns
 # scanone=np.ravel(scanone)
 # print(scanone)
 # print(scanone.shape)
-# np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48_scanone.npy', scanone)
+# np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/44_scanone.npy', scanone)
 
 # scanint=all[1:,4:]
 # scanint=np.ravel(scanint)
 # print(scanint)
 # print(scanint.shape)
-# np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/48_scanint.npy', scanint)
+# np.save('/dhcp/fmri_anna_graham/GKgit/finger_npy/44_scanint.npy', scanint)
 
 #########################################################
 
@@ -274,15 +274,16 @@ import seaborn as sns
 
 ########################################
 
-allsessid = {'pid101': ['ses111', 'ses222'], 'pid202': ['ses333', 'ses444'], 'pid303': ['ses555', 'ses666']}
+# allsessid = {'pid101': ['ses111', 'ses222'], 'pid202': ['ses333', 'ses444'], 'pid303': ['ses555', 'ses666']}
 
-print(allsessid)
+# print(allsessid)
 
-del_pid=['pid202']
+# del_pid=['pid202']
 
-for pid in del_pid:
-    del allsessid[pid]
+# for pid in del_pid:
+#     del allsessid[pid]
 
-print('This is deleted allsessid:')
-print(allsessid)
+# print('This is deleted allsessid:')
+# print(allsessid)
 
+###############################################################

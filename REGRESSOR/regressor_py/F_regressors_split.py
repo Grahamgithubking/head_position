@@ -16,12 +16,12 @@ def loadsnr(snrtrue):
     # Loading SNR values for two splits per session
     # for all sessions of the 48 particpants with both preterm and term sessions
     if snrtrue:
-        snr_all = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/192_snrtrue.npy')
+        snr_all = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/176_snrtrue.npy')
     else:
-        snr_all = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/192hp_snr.npy')
+        snr_all = np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/176hp_snr.npy')
     mz=snr_all.shape
     print('starting snr_all shape is:')
-    print(mz) #snr_all has shape [48, 2, 2, 387]
+    print(mz) #snr_all has shape [44, 2, 2, 387]
     print()
     nsubj=mz[0]
     nsess=mz[1]
@@ -33,7 +33,7 @@ def loadsnr(snrtrue):
 
     snr_all_reshaped=np.reshape(snr_all, (nsubj*nsess*nhp, nroi))
     print('The shape of snr_all_reshaped is:')
-    print(snr_all_reshaped.shape) # snr_all_reshaped has shape [192, 387]
+    print(snr_all_reshaped.shape) # snr_all_reshaped has shape [176, 387]
     print()
 
     ## Products/edges of SNR values (to match the format of the original snr products used to deduce the OLS parameters c and m):
@@ -42,7 +42,7 @@ def loadsnr(snrtrue):
         snr=snr_all_reshaped[ind,:]
         snrbysnr[ind,:,:]=np.outer(snr, snr) #instead of using snr*snr.T
     print('The shape of snrbysnr is:')
-    print(snrbysnr.shape) # This is [192,387,387]
+    print(snrbysnr.shape) # This is [176,387,387]
     print()
     iu1 = np.triu_indices(nroi, k=1)
     allsnr_iu1=np.array([x[iu1]for x in snrbysnr]) #for each session, selecting the upper triangle of the 387x387 matrix
@@ -71,7 +71,7 @@ def loadsnr(snrtrue):
     return allsnr_sz, nedges
 
 def loadfc():
-    allfc = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/192fc.npy')
+    allfc = np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/176fc.npy')
     sz=allfc.shape
     print('Starting allfc shape is:')
     print(sz)
@@ -341,10 +341,10 @@ if __name__ == '__main__':
 
     orthog=True  #  Turn this of off if using snrfcy!
 
-    snrtrue=False  # If using true snr (True) versus Snr_Coil (False)
+    snrtrue=True  # If using true snr (True) versus Snr_Coil (False)
 
-    sess1=False
-    sess2=True
+    sess1=True
+    sess2=False
 
     splitA=True  # Where SNR (Coil/True) is from a 'different' split as FCy
     splitB=False

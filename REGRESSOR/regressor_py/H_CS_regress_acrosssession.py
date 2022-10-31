@@ -17,13 +17,13 @@ split=False
 
 # Load arrays:
 if full:
-    withinfc=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48withinfc.npy')
-    snrcoil=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/96_snr_416_erode1.npy')
-    snrtrue=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/96_snr_true.npy')
-    mfwd=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48_mFWD.npy')
-    scanint=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48_scanint.npy')
-    scanone=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48_scanone.npy')
-    mofc=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/48_mofc.npy') ## contains some 'nan' values!
+    withinfc=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/44withinfc.npy')
+    snrcoil=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/88_snr_416_erode1.npy')
+    snrtrue=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/88_snr_true.npy')
+    mfwd=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/44_mFWD.npy')
+    scanint=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/44_scanint.npy')
+    scanone=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/44_scanone.npy')
+    mofc=np.load('/dhcp/fmri_anna_graham/GKgit/finger_npy/44_mofc.npy') ## contains some 'nan' values!
 if split:
     ssssss
 
@@ -168,6 +168,6 @@ plt.legend([f"Mean SNR-group (p<{str(round(pvalues[1],3))})", \
 # plt.title(f"Relationship to Connectome Stability: \n Standardized Regression Coeffiecients", fontsize=30)
 plt.xticks([])
 plt.yticks([])
-plt.text(-0.25, -0.2, 'Degrees of freedom = 36 \n r2 = 0.50', fontsize = 24) # DOF = 42 observations - 5 parameters -1 = 36
+plt.text(-0.25, -0.2, 'Degrees of freedom = 33 \n r2 = 0.49', fontsize = 24) # DOF = 39 observations - 5 parameters -1 = 33
 plt.savefig(f"/dhcp/fmri_anna_graham/GKgit/head_position/REGRESSOR/regressor_figures/SRC_ALL.jpg")
 
