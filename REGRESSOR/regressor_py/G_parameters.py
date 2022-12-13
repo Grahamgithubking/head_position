@@ -22,7 +22,8 @@ import seaborn as sns
 parameters=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/74691_params_snr_416_erode1.npy') # Edit name here!
 slopes=parameters[:,1:]
 med=np.median(slopes)
-print(f"The median of the 74691 slopes is: {med}")
+slope_mean=np.mean(slopes)
+print(f"The median of the 74691 slopes is: {med} and the mean is {slope_mean}")
 print()
 
 plt.figure(1)
@@ -32,11 +33,12 @@ plt.xlabel('Standardized Regression Coefficient')
 plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/REGRESSOR/regressor_figures/74691_slopes_snr_416_erode1.jpg') # Edit name here!
 
 
-# ## For 48 participants with 2 sessions:
+# ### For 48 participants with 2 sessions:
 # parameters=np.load('/dhcp/fmri_anna_graham/GKgit/snr_npy/74691_params_snr_416_erode1_indep88.npy') # Edit name here!
 # slopes=parameters[:,1:]
 # med=np.median(slopes)
-# print(f"The median of the 74691 slopes is: {med}")
+# slope_mean=np.mean(slopes)
+# print(f"The median of the 74691 slopes is: {med} and the mean is {slope_mean}")
 # print()
 
 # plt.figure(1)

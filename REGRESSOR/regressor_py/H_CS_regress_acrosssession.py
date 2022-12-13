@@ -32,10 +32,7 @@ if full:
     snrcoil=np.mean(snrcoil, axis=(1,2))
     snrtrue=np.mean(snrtrue, axis=(1,2))
 if split:
-    snrcoil=np.reshape(snrcoil, (48*2,2,387))
-    snrcoil=np.mean(snrcoil, axis=(2,3))
-    snrtrue=np.reshape(snrtrue, (48*2,2,387))
-    snrtrue=np.mean(snrtrue, axis=(2,3))
+    ssssss
 print()
 print(withinfc.shape)
 print(snrcoil.shape)

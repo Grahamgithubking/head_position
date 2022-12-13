@@ -49,24 +49,28 @@ print(f"The max of x prem is: {max(xprem)}")
 print()
 
 plt.figure(1)
+plt.subplots(figsize=(6, 6))
 # sns.kdeplot(x=(xprem), y=(yprem), color='red')
 # sns.kdeplot(x=(xterm), y=(yterm), color='blue')
 plt.scatter(x=(xprem), y=(yprem), c='red')
 plt.scatter(x=(xterm), y=(yterm), c='blue')
-plt.xticks(range(int(min(xprem)),int(max(yprem))+1,4))
-plt.yticks(range(int(min(xprem)),int(max(yprem))+1,4))
-plt.xlim([-15,30])
-plt.ylim([-15,30])
+# plt.xticks(range(int(min(xprem)),int(max(yprem))+1,4))
+# plt.yticks(range(int(min(xprem)),int(max(yprem))+1,4))
+plt.xticks(range(-16,32,4))
+plt.yticks(range(-16,32,4))
+
+plt.xlim([-16,32])
+plt.ylim([-16,32])
 # plt.title('Centroids of brainmasks', fontsize=15, fontweight="bold")
-plt.xlabel('left   -   right (mm)', fontsize=13)
-plt.ylabel('posterior   -   anterior (mm)', fontsize=13)
-plt.legend(('Preterm', 'Term'), loc='upper right', fontsize=10, labelcolor=('red', 'blue'))
+plt.xlabel('left   -   right (mm)', fontsize=15)
+plt.ylabel('posterior   -   anterior (mm)', fontsize=15)
+plt.legend(('Preterm', 'Term'), loc='upper right', fontsize=12, labelcolor=('red', 'blue'))
 
 ### Save out:
 plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fingerfigures_misc/centroidplot.jpg')
 
-## If want to see the 3 participants who fingerprinted successfully:
-plt.scatter(x=(top_xprem), y=(top_yprem), c='yellow', marker="D") # To identfy 3 participants who fingerprinted
-plt.scatter(x=(top_xterm), y=(top_yterm), c='green', marker="D") # To identfy 3 participants who fingerprinted
-plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fingerfigures_misc/centroidplot_tops.jpg')
+# ## If want to see the 3 participants who fingerprinted successfully:
+# plt.scatter(x=(top_xprem), y=(top_yprem), c='yellow', marker="D") # To identfy 3 participants who fingerprinted
+# plt.scatter(x=(top_xterm), y=(top_yterm), c='green', marker="D") # To identfy 3 participants who fingerprinted
+# plt.savefig('/dhcp/fmri_anna_graham/GKgit/head_position/FINGER/finger_figures/fingerfigures_misc/centroidplot_tops.jpg')
 
